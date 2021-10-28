@@ -1,5 +1,5 @@
 # advent-of-code-2021
-My solutions to an earlier Advent of Code December 2021
+My solutions to the Advent of Code December 2021
 
 Advent of Code Website:  [Advent of Code](https://adventofcode.com)
 
