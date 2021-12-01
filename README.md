@@ -5,12 +5,12 @@ Advent of Code Website:  [Advent of Code](https://adventofcode.com)
 
 My solution to each day's puzzles.  In Scala 3 unless otherwise noted.
 
-1. Day  1:  
+1. Day  1: Sonar Sweep
 2. Day  2:  
 
 ### Notes
 #### Day 01
+Off to a good start.
 
 #### Day 02
-
 
