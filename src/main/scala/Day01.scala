@@ -18,5 +18,15 @@ object Day01 extends App{
 
   println(s"Part 1 answer: $result")
 
+  // take in groups of a sliding window of 3
+  // find sum of each group which produces a new vector of Ints
+  // apply part 1 soln
+  val window = lines.sliding(3).map(_.reduceLeft(_+_)).toVector
+  //window.foreach(println(_))
+  val result2 =  window.zip(window.drop(1)).map((a,b) => if ((b-a)>0) 1 else 0)
+  //result2.foreach(println(_))
+
+  println(s"Part 2 answer: ${result2.sum}")
+
   bufferedSource.close
 }
