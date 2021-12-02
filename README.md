@@ -6,7 +6,7 @@ Advent of Code Website:  [Advent of Code](https://adventofcode.com)
 My solution to each day's puzzles.  In Scala 3 unless otherwise noted.
 
 1. Day  1: Sonar Sweep
-2. Day  2:  
+2. Day  2: Dive!
 
 ### Notes
 #### Day 01
