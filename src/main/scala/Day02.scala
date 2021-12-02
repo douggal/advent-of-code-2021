@@ -6,7 +6,7 @@ object Day02 extends App {
 
   println(s"--- Day 2: Dive! ---")
 
-  val filename = "testInput.txt"
+  val filename = "Day02Input.txt"
   val bufferedSource = scala.io.Source.fromFile(filename)
   val course = bufferedSource
     .getLines
@@ -62,22 +62,23 @@ object Day02 extends App {
     if (course.isEmpty) ()
     else {
       val (c:String, x:Int) = course.head  // c = nav command, x = units
+      val (f,d,a) = loc2
       c match {
         case "forward" =>
           // 1. increase horizontal position by x units
           // 2. increase depth + ( aim (3rd item in tuple) multiplied by X )
-          loc2 = (loc2._1+x,loc2._2+(loc2._3*x),loc2._3)
-          println(loc2)
+          loc2 = (f+x,d+(a*x),a)
+          // println(loc2)
           navigate2(course.tail)
 
         case "down" =>
-          loc2 = (loc2._1,loc2._2,loc2._3+x) // from the hint, down = aim increases, gets bigger
-          println(loc2)
+          loc2 = (f,d,a+x) // from the hint, down = aim increases, gets bigger
+          // println(loc2)
           navigate2(course.tail)
 
         case "up" =>
-          loc2 = (loc2._1,loc2._2,loc2._3-x) // from the hint, down = aim decreases, gets smaller
-          println(loc2)
+          loc2 = (f,d,a-x) // from the hint, down = aim decreases, gets smaller
+          // println(loc2)
           navigate2(course.tail)
 
         case _ => println("Error"); ()
