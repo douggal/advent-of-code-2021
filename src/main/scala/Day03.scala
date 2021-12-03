@@ -4,7 +4,7 @@ object Day03 extends App {
 
   println(s"--- Day 3: Binary Diagnostic ---")
 
-  val filename = "testInput.txt"
+  val filename = "Day03Input.txt"
   val bufferedSource = scala.io.Source.fromFile(filename)
   val diagnosticRpt = bufferedSource
     .getLines
@@ -33,6 +33,7 @@ object Day03 extends App {
   for (digit <- keys) zeros += digit -> (diagnosticRpt.length - ones(digit))
 
   // most common bit at each position
+  // TODO: what if they're equal?
   val mostCommonDigits = scala.collection.mutable.HashMap[Int, Int]()
   for (key <- keys)
     if (ones(key) > zeros(key))
@@ -44,9 +45,8 @@ object Day03 extends App {
   println(zeros)
   println(mostCommonDigits)
 
-  println(mostCommonDigits.values.toVector.reverse.zipWithIndex)
-
   //https://stackoverflow.com/questions/2213323/how-can-i-use-map-and-receive-an-index-as-well-in-scala
+  //println(mostCommonDigits.values.toVector.reverse.zipWithIndex)
   val gammaRate = mostCommonDigits.values
     .toVector
     .reverse
@@ -54,9 +54,20 @@ object Day03 extends App {
     .map{ case (d, i) => d * Math.pow(2,i) }
     .sum
 
-  println(gammaRate.toInt)
+  println(s"Gamma Rate: ${gammaRate.toInt}")
 
-  println(s"Day 3 Part 1 answer TBD")
+  // least common digit is then opposite of most common
+  val epsilonRate = mostCommonDigits.values
+    .toVector
+    .reverse
+    .map(d => if (d==0) 1 else 0)
+    .zipWithIndex
+    .map{ case (d, i) => d * Math.pow(2,i) }
+    .sum
+
+  println(s"Epsilon Rate: ${epsilonRate.toInt}")
+
+  println(s"Day 3 Part 1 answer ${gammaRate.toInt*epsilonRate.toInt}")
   println()
 
 }
