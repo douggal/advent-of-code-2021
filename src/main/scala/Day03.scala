@@ -1,3 +1,5 @@
+import scala.annotation.tailrec
+
 object Day03 extends App {
   // created 12/03/2021
   // https://adventofcode.com/2021/day/3
@@ -17,12 +19,12 @@ object Day03 extends App {
   // debug check what diagnostic report looks like
   //diagnosticRpt.foreach(d => println(f"${d}%10s"))
 
-  // just count up 1s in each position in each line of the diag rpt?
+  // just count up 1s in each position in each line of the diagnostic rpt?
   val ones = scala.collection.mutable.HashMap[Int, Int]()
 
   // assert all lines in rpt have same width?
   // set up a range which are the column numbers starting with 0 and counting to the right
-  val keys = 0 until diagnosticRpt(0).length // range 0,1,2,..n
+  val keys = 0 until diagnosticRpt.head.length // range 0,1,2,..n
 
   // Initialize HashMap of counts
   for (i <- keys)
@@ -87,46 +89,64 @@ object Day03 extends App {
       .map{i => i.toInt}
       .reverse
       .zipWithIndex
-      .map{ case (d, i) => d * (Math.pow(2,i)).toInt }
+      .map{ case (d, i) => d * Math.pow(2,i).toInt }
       .sum
   }
 
+  @tailrec
   def findO2rating(p: Int, d: Seq[String]): String = {
-    // p is column position from right to left in diag report
+    // p is column position from right to left in diagnostic report
     // d is the diagnostic report successively filtered down until
     // it is just one
     // NOTE: will error out if d is empty and not found
-    if (d.isEmpty | d.length == 1) d(0)
+    if (d.isEmpty | d.length == 1) d.head
     else {
       // f is d filtered down to lines matching most common digit
       // at the given column  position
       val f = scala.collection.mutable.ListBuffer[String]()
       d.foreach(s => {
-        if (s(p).asDigit == mostCommonDigits(p)) f += s
+        //If 0 and 1 are equally common, keep values with a 1 in the position being considered.
+        var sum = 0
+        d.foreach(s => {
+            if (s(p).asDigit == 1) sum += 1
+        })
+        val mostCommonDig = if (sum*2 >= d.length) 1 else 0
+        if (s(p).asDigit == mostCommonDig) f += s
       })
+      f.foreach(s => println(s"O2 Column $p, $s"))
       findO2rating(p+1, f.toSeq)
     }
   }
 
+  @tailrec
   def findCO2rating(p: Int, d: Seq[String]): String = {
-    // p is column position from right to left in diag report
+    // p is column position from right to left in diagnostic report
     // d is the diagnostic report successively filtered down until
     // it is just one
     // NOTE: will error out if d is empty and not found
-    if (d.isEmpty | d.length == 1) d(0)
+    if (d.isEmpty | d.length == 1) d.head
     else {
       // f is d filtered down to lines matching most common digit
       // at the given column  position
       val f = scala.collection.mutable.ListBuffer[String]()
       d.foreach(s => {
-        if (s(p).asDigit == mostCommonDigits(p)) f += s
+        //If 0 and 1 are equally common, keep values with a 0 in the position being considered.
+        var sum = 0
+        d.foreach(s => {
+          if (s(p).asDigit == 1) sum += 1
+        })
+        val mostCommonDig = if (sum*2 <= d.length) 0 else 1
+        if (s(p).asDigit == mostCommonDig) f += s
       })
-      findO2rating(p+1, f.toSeq)
+      f.foreach(s => println(s"CO2 Column $p, $s"))
+      findCO2rating(p+1, f.toSeq)
     }
   }
   val o2 = findO2rating(0, diagnosticRpt)
-
   println(s"O2 rating: ${convertBinaryStrToInt(o2)}")
+
+  val co2 = findCO2rating(0, diagnosticRpt)
+  println(s"CO2 Scrubber rating: ${convertBinaryStrToInt(co2)}")
 
   println(s"Day 3 Part 2 life support rating: TBD")
 
