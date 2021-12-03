@@ -44,14 +44,17 @@ object Day03 extends App {
   println(zeros)
   println(mostCommonDigits)
 
+  println(mostCommonDigits.values.toVector.reverse.zipWithIndex)
 
+  //https://stackoverflow.com/questions/2213323/how-can-i-use-map-and-receive-an-index-as-well-in-scala
+  val gammaRate = mostCommonDigits.values
+    .toVector
+    .reverse
+    .zipWithIndex
+    .map{ case (d, i) => d * Math.pow(2,i) }
+    .sum
 
-  // for each position which is most common bit
-//  val mostCommon = scala.collection.mutable.HashMap[Int, Int]()
-//  val nbrLines = diagnosticRpt.length
-//  for (digit <- ones.keys) {
-//    mostCommon += ones(digit) -> if (ones(digit) - nbrLines)ones
-//  }
+  println(gammaRate.toInt)
 
   println(s"Day 3 Part 1 answer TBD")
   println()
