@@ -126,7 +126,7 @@ object Day03 extends App {
     // NOTE: will error out if d is empty and not found
     if (d.isEmpty | d.length == 1) d.head
     else {
-      // f is d filtered down to lines matching most common digit
+      // f is d filtered down to lines matching least common digit
       // at the given column  position
       val f = scala.collection.mutable.ListBuffer[String]()
       d.foreach(s => {
@@ -135,8 +135,8 @@ object Day03 extends App {
         d.foreach(s => {
           if (s(p).asDigit == 1) sum += 1
         })
-        val mostCommonDig = if (sum*2 <= d.length) 0 else 1
-        if (s(p).asDigit == mostCommonDig) f += s
+        val leastCommonDig = if (sum*2 >= d.length) 0 else 1
+        if (s(p).asDigit == leastCommonDig) f += s
       })
       f.foreach(s => println(s"CO2 Column $p, $s"))
       findCO2rating(p+1, f.toSeq)
