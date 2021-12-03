@@ -85,6 +85,7 @@ object Day03 extends App {
   def convertBinaryStrToInt(s: String): Int = {
     s.split("")
       .map{i => i.toInt}
+      .reverse
       .zipWithIndex
       .map{ case (d, i) => d * (Math.pow(2,i)).toInt }
       .sum
@@ -107,10 +108,25 @@ object Day03 extends App {
     }
   }
 
+  def findCO2rating(p: Int, d: Seq[String]): String = {
+    // p is column position from right to left in diag report
+    // d is the diagnostic report successively filtered down until
+    // it is just one
+    // NOTE: will error out if d is empty and not found
+    if (d.isEmpty | d.length == 1) d(0)
+    else {
+      // f is d filtered down to lines matching most common digit
+      // at the given column  position
+      val f = scala.collection.mutable.ListBuffer[String]()
+      d.foreach(s => {
+        if (s(p).asDigit == mostCommonDigits(p)) f += s
+      })
+      findO2rating(p+1, f.toSeq)
+    }
+  }
   val o2 = findO2rating(0, diagnosticRpt)
 
   println(s"O2 rating: ${convertBinaryStrToInt(o2)}")
-
 
   println(s"Day 3 Part 2 life support rating: TBD")
 
