@@ -91,11 +91,11 @@ object Day03 extends App {
     else {
       // f is d filtered down to lines matching most common digit
       // at the given column  position
-      val f = Seq[String]()
+      val f = scala.collection.mutable.ListBuffer[String]()
       d.foreach(s => {
         if (s(p).asDigit == mostCommonDigits(p)) f += s
       })
-      findO2rating(f)
+      findO2rating(p+1, f.toSeq)
     }
   }
 
