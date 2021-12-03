@@ -82,6 +82,14 @@ object Day03 extends App {
   // Next, you should verify the life support rating, which can be determined
   // by multiplying the oxygen generator rating by the CO2 scrubber rating.
 
+  def convertBinaryStrToInt(s: String): Int = {
+    s.split("")
+      .map{i => i.toInt}
+      .zipWithIndex
+      .map{ case (d, i) => d * (Math.pow(2,i)).toInt }
+      .sum
+  }
+
   def findO2rating(p: Int, d: Seq[String]): String = {
     // p is column position from right to left in diag report
     // d is the diagnostic report successively filtered down until
@@ -101,7 +109,7 @@ object Day03 extends App {
 
   val o2 = findO2rating(0, diagnosticRpt)
 
-  println(s"O2 rating: $o2")
+  println(s"O2 rating: ${convertBinaryStrToInt(o2)}")
 
 
   println(s"Day 3 Part 2 life support rating: TBD")
