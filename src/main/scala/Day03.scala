@@ -6,8 +6,8 @@ object Day03 extends App {
 
   println(s"--- Day 3: Binary Diagnostic ---")
 
-  //val filename = "Day03Input.txt"
-  val filename = "testInput.txt"
+  val filename = "Day03Input.txt"
+  //val filename = "testInput.txt"
   val bufferedSource = scala.io.Source.fromFile(filename)
   val diagnosticRpt = bufferedSource
     .getLines
@@ -113,7 +113,7 @@ object Day03 extends App {
         val mostCommonDig = if (sum*2 >= d.length) 1 else 0
         if (s(p).asDigit == mostCommonDig) f += s
       })
-      f.foreach(s => println(s"O2 Column $p, $s"))
+      //f.foreach(s => println(s"O2 Column $p, $s"))
       findO2rating(p+1, f.toSeq)
     }
   }
@@ -138,7 +138,7 @@ object Day03 extends App {
         val leastCommonDig = if (sum*2 >= d.length) 0 else 1
         if (s(p).asDigit == leastCommonDig) f += s
       })
-      f.foreach(s => println(s"CO2 Column $p, $s"))
+      //f.foreach(s => println(s"CO2 Column $p, $s"))
       findCO2rating(p+1, f.toSeq)
     }
   }
@@ -148,6 +148,9 @@ object Day03 extends App {
   val co2 = findCO2rating(0, diagnosticRpt)
   println(s"CO2 Scrubber rating: ${convertBinaryStrToInt(co2)}")
 
-  println(s"Day 3 Part 2 life support rating: TBD")
+  // to find the life support rating,
+  // multiply the oxygen generator rating by the CO2 scrubber rating
+
+  println(s"Day 3 Part 2 life support rating: ${convertBinaryStrToInt(o2)*convertBinaryStrToInt(co2)}")
 
 }
