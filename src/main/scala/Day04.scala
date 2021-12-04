@@ -17,7 +17,7 @@ object Day04 extends App {
 
   bufferedSource.close
 
-  class bingoBoard(val board: Vector[String]) {
+  class bingoBoard(val board: Vector[Int]) {
     // create a list 0's/1's to hold marked squares
     private val _markerList = ListBuffer[Int]()
     for (i <- 0 until board.length) _markerList += 0
@@ -32,7 +32,18 @@ object Day04 extends App {
   val numberCaller = input.head.split(',').toList.map(_.toInt)
   //println(numberCaller)
 
+  // set up game board(s)
+  //val boards = createBoards(input)
+  val bingoBoards = ListBuffer[bingoBoard]()
+  var l = ""
+  for (line <- input.tail)
+    if (line != "")
+      l += " " + line
+    else
+      if (l != "")
+        bingoBoards += new bingoBoard(l.split("\\s+",-1).toVector.drop(1).map(_.toInt))
 
+  val i = 0
 
 
 
