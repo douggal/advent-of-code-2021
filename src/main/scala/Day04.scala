@@ -28,6 +28,7 @@ object Day04 extends App {
       ucLines.toVector
     }
 
+  // read the input file, check for success or failure
   val input: Vector[String] = readFileAsSeq(filename) match
     case Success(i) => {
       println(s"Success, file read")
@@ -38,7 +39,7 @@ object Day04 extends App {
       Vector[String]()
     }
 
-  // a bingo board, two lists one for the board's numbers
+  // model the bingo board as two lists one for the board's numbers
   // and the other to track which spots are marked
   class bingoBoard(val board: Vector[Int]) {
     // create a list 0's/1's to hold marked squares
@@ -51,11 +52,13 @@ object Day04 extends App {
     }
   }
 
-  // set up number caller
+  // first item is to set up number caller from 1st line of input
   val numberCaller = input.head.split(',').toList.map(_.toInt)
   //println(numberCaller)
 
-  // set up game board(s), keep them in a list
+  // next set up game board(s) from the remaining file input
+  // keep them in a list
+  // TODO: seems to work ok, but can this code be improved?
   val bingoBoards = ListBuffer[bingoBoard]()
   var l = ""
   for (line <- input.tail) {
@@ -68,8 +71,7 @@ object Day04 extends App {
   // pick up last board if there is one
   if (l != "")  bingoBoards += new bingoBoard(l.split("\\s+",-1).toVector.drop(1).map(_.toInt))
 
-  val i = 0
-
+  // play BINGO!
 
 
   println(s"Day 4 Part 1 answer TBD")
