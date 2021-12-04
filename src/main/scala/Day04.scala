@@ -1,6 +1,6 @@
 import scala.collection.mutable.ListBuffer
 import scala.util.Using
-import scala.util.{Try, Success, Failure}
+import scala.util.{Failure, Success, Try}
 
 object Day04 extends App {
 
@@ -28,7 +28,7 @@ object Day04 extends App {
             ucLines.toVector
         }
 
-    // read the input file, check for success or failure
+    // read the input file and with a check for success or failure
     val input: Vector[String] = readFileAsSeq(filename) match
         case Success(i) =>
             println(s"Success, file read")
@@ -41,7 +41,7 @@ object Day04 extends App {
     // and the other to track which spots are marked
     class bingoBoard(val board: Vector[Int]) {
         private val _size = 5
-        private val _bingo = false
+        var bingo = false
         // create a list 0's/1's to hold marked squares
         private val _markerList = ListBuffer[Int]()
         for (i <- board.indices) _markerList += 0
@@ -50,14 +50,18 @@ object Day04 extends App {
             // TODO: write a check for bingo
             false
         }
+
+        def checkBingo = {
+          bingo = true
+        }
     }
 
-    // first item is to set up number caller from 1st line of input
+    // first to do item is to set up number caller from 1st line of input
     val numberCaller = input.head.split(',').toList.map(_.toInt)
     //println(numberCaller)
 
-    // next set up game board(s) from the remaining file input
-    // keep them in a list
+    // next, set up game board(s) from the remaining file input
+    // keep them in a list and each board is separated by a blank line
     // TODO: seems to work ok, but can this code be improved?
     val bingoBoards = ListBuffer[bingoBoard]()
     var l = ""
@@ -65,7 +69,7 @@ object Day04 extends App {
         if (line != "")
             l += " " + line
         else if (line == "" && l != "")
-            //those leading spaces are a tripping hazard :)
+            // those leading spaces are a tripping hazard :)
             // https://stackoverflow.com/questions/7899525/how-to-split-a-string-by-space/7899558
             bingoBoards += new bingoBoard(l.trim.split("\\s+", -1).toVector.map(_.toInt))
             l = ""
@@ -74,11 +78,32 @@ object Day04 extends App {
     if (l != "") bingoBoards += new bingoBoard(l.trim.split("\\s+", -1).toVector.map(_.toInt))
 
     // play BINGO!
+    def bingoPlay(i: Int): Boolean = {
+      ()
+    }
+
+    def scoreBingoBoard(i: Int): Int = {
+      0
+    }
+
     println("Play BINGO! with the Giant Squid")
+    var bingo = false
+    var game = -1
+    while (!bingo) {
+      game += 1
+      bingo = bingoPlay(game)
+    }
 
+    val winningBoard = bingoBoards.filter(b => b.bingo == true).indices.toVector.take(1
+    )
 
-    println(s"Day 4 Part 1 answer TBD")
-    println()
+    if (winningBoard != -1)
+      val score = scoreBingoBoard(winningBoard)
+      println(s"Day 4 Part 1 answer $score")
+    else
+      println("No winner this round")
+
+  println()
 
     println(s"Day 4 Part 2 answer: TBD")
 
