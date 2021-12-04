@@ -33,15 +33,17 @@ object Day04 extends App {
   //println(numberCaller)
 
   // set up game board(s)
-  //val boards = createBoards(input)
   val bingoBoards = ListBuffer[bingoBoard]()
   var l = ""
   for (line <- input.tail)
     if (line != "")
       l += " " + line
     else
-      if (l != "")
+      if (line == "" && l != "")
         bingoBoards += new bingoBoard(l.split("\\s+",-1).toVector.drop(1).map(_.toInt))
+        l = ""
+     // pick up last board if there is one
+    if (l != "")  bingoBoards += new bingoBoard(l.split("\\s+",-1).toVector.drop(1).map(_.toInt))
 
   val i = 0
 
