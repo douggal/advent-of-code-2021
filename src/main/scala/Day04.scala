@@ -47,25 +47,25 @@ object Day04 extends App {
         for (i <- board.indices) _markerList += 0
 
         def play(n: Int): Unit = {
-          if (!bingo) {
-              val found = board.indexOf(n)
-              if (found != -1){
-                  _markerList(found) = 1
-              }
-          }
+            if (!bingo) {
+                val found = board.indexOf(n)
+                if (found != -1) {
+                    _markerList(found) = 1
+                }
+            }
 
         }
 
         def checkBingo = {
-          // check the rows
-          for (grp <- _markerList.grouped(5))
-              if (grp.sliding(2).sum == _size)
-                  bingo = true
+            // check the rows
+            for (grp <- _markerList.grouped(5))
+                if (grp.toVector.sum == _size)
+                    bingo = true
 
-          // check the columns
-          for (grp <- _markerList.grouped(5,5))
-              if (grp.sliding(2).sum == _size)
-                  bingo = true
+            // check the columns
+            for (grp <- _markerList.sliding(5, 5))
+                if (grp.toVector.sum == _size)
+                    bingo = true
         }
     }
 
@@ -91,42 +91,41 @@ object Day04 extends App {
     if (l != "") bingoBoards += new bingoBoard(l.trim.split("\\s+", -1).toVector.map(_.toInt))
 
     // play BINGO!
-    def bingoPlay(n: Int): Boolean = {
-      for (b <- bingoBoards) {
-        b.play(n)
-      }
+    def bingoPlay(n: Int): Unit = {
+        bingoBoards
+          .foreach(b => b.play(n))
     }
 
-    def checkBingo(boards: bingoBoard): Vector[Int] = {
-      bingoBoards.filter(b => b.bingo == true).indices.toVector
+    def checkBingo(boards: ListBuffer[bingoBoard]): Vector[Int] = {
+        bingoBoards.filter(b => b.bingo).indices.toVector
     }
 
     def scoreBingoBoard(i: Int): Int = {
-      0
+        0
     }
 
     println("Play BINGO! with the Giant Squid")
     var bingo = false
     var round = -1
     var calledNumber = -1
-    while (!bingo && round < numberCaller.length) {
-      calledNumber = numberCaller(round)
-      round += 1
-      bingoPlay(calledNumber)
-      if (checkBingo(bingoBoards).length > 0)
-          bingo = true
+    while (!bingo && round < numberCaller.length-1) {
+        round += 1
+        calledNumber = numberCaller(round)
+        bingoPlay(calledNumber)
+        if (checkBingo(bingoBoards).length > 0)
+            bingo = true
     }
 
     val winningBoards = checkBingo(bingoBoards)
     val winningBoard = if (winningBoards.isEmpty) -1 else winningBoards.head
 
     if (winningBoard != -1)
-      val score = scoreBingoBoard(winningBoard)
-      println(s"Day 4 Part 1 answer $score")
+        val score = scoreBingoBoard(winningBoard)
+        println(s"Day 4 Part 1 answer $score")
     else
-      println("No winner this round")
+        println("No winner this round")
 
-  println()
+    println()
 
     println(s"Day 4 Part 2 answer: TBD")
 
