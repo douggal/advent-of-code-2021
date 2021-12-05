@@ -147,6 +147,9 @@ object Day04 extends App {
 
     println()
 
+    // Part Two.  Find and score the board that wins last.
+
+
     println(s"Day 4 Part 2 answer: TBD")
 
 }
