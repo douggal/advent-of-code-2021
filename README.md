@@ -7,6 +7,7 @@ My solution to each day's puzzles.  In Scala 3 unless otherwise noted.
 
 My goals for this year's AoC are to have fun, to improve my understanding of functional
 programming techniques with use, and to learn [Scala](https://www.scala-lang.org) programming language.
+Some algorithms chosen were my attempt to exercise functional programming techniques.
 
 1. Day  1: Sonar Sweep
 2. Day  2: Dive!
