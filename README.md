@@ -9,6 +9,7 @@ My solution to each day's puzzles.  In Scala 3 unless otherwise noted.
 2. Day  2: Dive!
 3. Day  3: Binary Diagnostic
 4. Day  4: Giant Squid
+5. Day  5:  Hydrothermal Venture
 
 ### Notes
 #### Day 01
@@ -24,3 +25,7 @@ Is there a way to avoid nested loops (maybe a built-in transpose function)?
 Completed Part Two at 3 minutes before midnight on the 4th.  I made two mistakes: 1) somehow
 typed in a "1" to first number line 1 of data in the file when saving the puzzle input, 
 and 2) for part two I did not reload the data after part 1 completed.  
+
+#### Day 05
+Choose a represenation of this sparse matrix that will work will
+with functional programming methods
