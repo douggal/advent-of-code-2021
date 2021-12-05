@@ -9,8 +9,8 @@ object Day04 extends App {
 
     println(s"--- Day 4: Giant Squid ---")
 
-    val filename = "Day04Input.txt"
-    //val filename = "testInput.txt"
+    //val filename = "Day04Input.txt"
+    val filename = "testInput.txt"
 
     // Try out a better read file w/Using object from Alexander, Alvin.
     // Scala Cookbook: Recipes for Object-Oriented and Functional Programming.
@@ -148,8 +148,24 @@ object Day04 extends App {
     println()
 
     // Part Two.  Find and score the board that wins last.
+    println("Play BINGO! with the Giant Squid: Round Two Let the Squid Win")
+    val winningBoardsInOrder = ListBuffer[Int]()
+    round = -1
+    calledNumber = -1
+    while (round < numberCaller.length-1) {
+        round += 1
+        calledNumber = numberCaller(round)
+        playBingoRound(calledNumber)
+        val w = checkAllBoards(bingoBoards)
+        for (i <- w) if (winningBoardsInOrder.indexOf(i) == -1) winningBoardsInOrder += i
+    }
 
+    val lastWinningBoard = if (winningBoardsInOrder.isEmpty) -1 else winningBoardsInOrder.last
 
-    println(s"Day 4 Part 2 answer: TBD")
+    if (lastWinningBoard != -1)
+        val scorePt2 = bingoBoards(lastWinningBoard).score
+        println(s"Day 4 Part 2 score of last winning board, $lastWinningBoard, is $scorePt2")
+    else
+        println("Part 2 No winner this round")
 
 }
