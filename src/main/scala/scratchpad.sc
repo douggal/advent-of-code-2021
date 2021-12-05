@@ -1,25 +1,32 @@
-val v = Vector[Int](200,300,299, 400,500)
+val l = Vector(22,13,17,11,0,8,2,23,4,24,21,9,14,16,7,6,10,3,18,5,1,12,20,15,19)
+for (grp <- l.grouped(5)) println(grp)
 
-def diff(v: Vector[Int]): Int = {
-  v.reduceLeft(_ - _)
-}
+val m = scala.collection.mutable.ListBuffer[Int]()
+for (i <- 0 until 25) m += 0
 
-v.zip(v.drop(1)).map((a,b) => if ((b-a)>0) 1 else 0).sum
+for (i <- 5 until 10) m(i) = 1
+m(0) = 1
+m(4) = 1
+m(9) = 1
+m(14) = 1
+m(19) = 1
+m(24) = 1
 
-math.pow(2,3)
+val m = List(1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1)
 
-def convertBinaryStrToInt(s: String): Int = {
-  s.split("")
-    .map{i => i.toInt}
-    .zipWithIndex
-    .map{ case (d, i) => d * (Math.pow(2,i)).toInt }
-    .sum
-}
-val s = "0101"
 
-s.split("")
-  .map{i => i.toInt}
-  .zipWithIndex
+l.zip(m).filter(i => if (i(1)==0) true else false).map(i => i(0))
 
-convertBinaryStrToInt(s)
+println("Rows")
+for (grp <- m.sliding(5,5).toList)
+    println(grp)
+    if (grp.toVector.sum == 5)
+        println("bingo")
+
+println("Columns")
+for (n <- 0 until 5)
+    val grp = m.drop(n).grouped(5).map(_.head).toList
+    println(grp)
+    if (grp.toVector.sum == 5)
+        println("bingo")
 
