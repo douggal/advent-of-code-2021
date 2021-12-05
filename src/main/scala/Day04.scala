@@ -63,9 +63,12 @@ object Day04 extends App {
                     bingo = true
 
             // check the columns
-            for (n <- 0 until 5)
-                val grp = _markerList.drop(n).grouped(5).map(_.head).toList
+            for (n <- 0 until _size)
+                // list of every nth element in marker list
+                //https://stackoverflow.com/questions/25227475/list-of-every-n-th-item-in-a-given-list
+                val grp = _markerList.drop(n).grouped(_size).map(_.head).toList
                 //println(grp)
+                // if the sum of 1's in this vertical slice is 5 then bingo
                 if (grp.toVector.sum == _size)
                     bingo = true
         }
@@ -93,13 +96,16 @@ object Day04 extends App {
     if (l != "") bingoBoards += new bingoBoard(l.trim.split("\\s+", -1).toVector.map(_.toInt))
 
     // play BINGO!
-    def bingoPlay(n: Int): Unit = {
+    def playBingoRound(n: Int): Unit = {
         bingoBoards
-          .foreach(b => b.play(n))
+          .foreach(b => {
+              b.play(n)
+              b.checkBingo
+          })
     }
 
-    def checkBingo(boards: ListBuffer[bingoBoard]): Vector[Int] = {
-        bingoBoards.filter(b => b.bingo).indices.toVector
+    def checkAllBoards(boards: ListBuffer[bingoBoard]): Vector[Int] = {
+        bingoBoards.filter(b => b.bingo == true).indices.toVector
     }
 
     def scoreBingoBoard(i: Int): Int = {
@@ -113,12 +119,12 @@ object Day04 extends App {
     while (!bingo && round < numberCaller.length-1) {
         round += 1
         calledNumber = numberCaller(round)
-        bingoPlay(calledNumber)
-        if (checkBingo(bingoBoards).length > 0)
+        playBingoRound(calledNumber)
+        if (checkAllBoards(bingoBoards).length > 0)
             bingo = true
     }
 
-    val winningBoards = checkBingo(bingoBoards)
+    val winningBoards = checkAllBoards(bingoBoards)
     val winningBoard = if (winningBoards.isEmpty) -1 else winningBoards.head
 
     if (winningBoard != -1)
