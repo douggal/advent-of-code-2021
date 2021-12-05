@@ -55,14 +55,14 @@ object Day05 extends App {
         // generate all the pairs xs with ys
         // this is path followed from one endpoint to the other
         // ref: https://stackoverflow.com/questions/27101500/scala-permutations-using-two-lists
-        val xy = for {
+        val xys = for {
             i1 <- xs
             i2 <- ys
         } yield (i1, i2)
         //println(xy.mkString(" , "))
         // for each point (Tuple2) generated:
         //   populate x, y, z lists
-        xy.foreach(t => {
+        xys.foreach(t => {
             val (tx,ty) = t
             if (!x.zip(y).contains(t)) {
                 // case 1 the point does not exist in x, y, z, add it
@@ -77,11 +77,13 @@ object Day05 extends App {
                 z(q.head._2) += 1
                 val i = 0
             }
-
         })
-
-        val i = 1
     }
-    println(s"Day 5 Part 1 answer TBD")
+    println(x.mkString(" , "))
+    println(y.mkString(" , "))
+    println(z.mkString(" , "))
+    val result = z.filter(f => if (f>1) true else false).length
+
+    println(s"Day 5 Part 1 the number points at which line segments overlap ${result}")
 
 }
