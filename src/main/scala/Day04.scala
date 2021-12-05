@@ -9,8 +9,8 @@ object Day04 extends App {
 
     println(s"--- Day 4: Giant Squid ---")
 
-    //val filename = "Day04Input.txt"
-    val filename = "testInput.txt"
+    val filename = "Day04Input.txt"
+    //val filename = "testInput.txt"
 
     // Try out a better read file w/Using object from Alexander, Alvin.
     // Scala Cookbook: Recipes for Object-Oriented and Functional Programming.
@@ -41,7 +41,7 @@ object Day04 extends App {
     // and the other to track which spots are marked
     class bingoBoard(val board: Vector[Int]) {
         private val _size = 5
-        var bingoNumber = -1
+        var bingoNumber: Int = -1
         var bingo = false
         // create a list 0's/1's to hold marked squares
         private val _markerList = ListBuffer[Int]()
@@ -50,7 +50,7 @@ object Day04 extends App {
         def play(n: Int): Unit = {
             if (!bingo) {
                 val found = board.indexOf(n)
-                if (found != -1) {
+                if (found >= 0) {
                     _markerList(found) = 1
                     checkBingo()
                     if (bingo) bingoNumber = n
@@ -58,7 +58,7 @@ object Day04 extends App {
             }
         }
 
-        def checkBingo() = {
+        def checkBingo(): Unit = {
             // check the rows
             for (grp <- _markerList.grouped(_size).toVector)
                 if (grp.sum == _size)
@@ -75,7 +75,7 @@ object Day04 extends App {
                     bingo = true
         }
 
-        def score: Int = {
+        def score(): Int = {
             // b = a board in the list of boards
             /*
             Start by finding the sum of all unmarked numbers on that board; in this case,
@@ -109,11 +109,15 @@ object Day04 extends App {
     // pick up last board if there is one
     if (l != "") bingoBoards += new bingoBoard(l.trim.split("\\s+", -1).toVector.map(_.toInt))
 
+    val winningBoardsInOrder = ListBuffer[Int]()
+
     // play BINGO!
     def playBingoRound(n: Int): Unit = {
         bingoBoards
-          .foreach(b => {
-              b.play(n)
+          .zipWithIndex
+          .foreach( board => {
+              board._1.play(n)
+              if (board._1.bingo && winningBoardsInOrder.indexOf(board._2) < 0) winningBoardsInOrder += board._2
           })
     }
 
@@ -149,15 +153,12 @@ object Day04 extends App {
 
     // Part Two.  Find and score the board that wins last.
     println("Play BINGO! with the Giant Squid: Round Two Let the Squid Win")
-    val winningBoardsInOrder = ListBuffer[Int]()
     round = -1
     calledNumber = -1
     while (round < numberCaller.length-1) {
         round += 1
         calledNumber = numberCaller(round)
         playBingoRound(calledNumber)
-        val w = checkAllBoards(bingoBoards)
-        for (i <- w) if (winningBoardsInOrder.indexOf(i) == -1) winningBoardsInOrder += i
     }
 
     val lastWinningBoard = if (winningBoardsInOrder.isEmpty) -1 else winningBoardsInOrder.last
@@ -167,5 +168,7 @@ object Day04 extends App {
         println(s"Day 4 Part 2 score of last winning board, $lastWinningBoard, is $scorePt2")
     else
         println("Part 2 No winner this round")
+
+        // 6650 too low
 
 }
