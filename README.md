@@ -5,6 +5,9 @@ Advent of Code Website:  [Advent of Code](https://adventofcode.com)
 
 My solution to each day's puzzles.  In Scala 3 unless otherwise noted.
 
+My goals for this year's AoC are to have fun, to improve my understanding of functional
+programming techniques with use, and to learn [Scala](https://www.scala-lang.org) programming language.
+
 1. Day  1: Sonar Sweep
 2. Day  2: Dive!
 3. Day  3: Binary Diagnostic
@@ -27,5 +30,5 @@ typed in a "1" to first number line 1 of data in the file when saving the puzzle
 and 2) for part two I did not reload the data after part 1 completed.  
 
 #### Day 05
-Choose a represenation of this sparse matrix that will work will
+Chose a representation of this sparse matrix that will work will
 with functional programming methods
