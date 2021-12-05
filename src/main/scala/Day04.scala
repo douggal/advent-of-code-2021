@@ -44,14 +44,14 @@ object Day04 extends App {
         var bingoNumber: Int = -1
         var bingo: Boolean = false
         // create a list 0's/1's to hold marked squares
-        val _markerList: ListBuffer[Int] = ListBuffer[Int]()
-        for (i <- board.indices) _markerList += 0
+        val markerList: ListBuffer[Int] = ListBuffer[Int]()
+        for (i <- board.indices) markerList += 0
 
         def play(n: Int): Boolean = {
             if (!bingo) {
                 val found = board.indexOf(n)
                 if (found >= 0) {
-                    _markerList(found) = 1
+                    markerList(found) = 1
                     //if (boardNumber == 24) println(s"$boardNumber: $_markerList")
                     checkBingo()
                     if (bingo) bingoNumber = n
@@ -62,7 +62,7 @@ object Day04 extends App {
 
         def checkBingo(): Unit = {
             // check the rows
-            for (grp <- _markerList.sliding(_size,_size).toList)
+            for (grp <- markerList.sliding(_size,_size).toList)
                 if (grp.sum == _size) {
                     //println(s"bingo board $boardNumber")
                     bingo = true
@@ -72,7 +72,7 @@ object Day04 extends App {
             for (n <- 0 until _size)
                 // list of every nth element in marker list
                 // https://stackoverflow.com/questions/25227475/list-of-every-n-th-item-in-a-given-list
-                val grp = _markerList.drop(n).grouped(_size).map(_.head).toList
+                val grp = markerList.drop(n).grouped(_size).map(_.head).toList
                 //println(grp)
                 // if the sum of 1's in this vertical slice is 5 then bingo
                 if (grp.toVector.sum == _size) {
@@ -89,7 +89,7 @@ object Day04 extends App {
             when the board won, 24, to get the final score
             */
             if (bingo) {
-                val sumUnmarked = board.zip(_markerList).filter(i => if (i(1)==0) true else false).map(i => i(0)).sum
+                val sumUnmarked = board.zip(markerList).filter(i => if (i(1)==0) true else false).map(i => i(0)).sum
                 sumUnmarked * bingoNumber
             } else -1
         }
@@ -102,7 +102,7 @@ object Day04 extends App {
 
     // next, set up game board(s) from the remaining file input
     // keep them in a list and each board is separated by a blank line
-    val bingoBoards = ListBuffer[bingoBoard]()
+    val bingoCardsList = ListBuffer[bingoBoard]()
     var l = ""
     var i = 0
     for (line <- input.tail) {
@@ -111,32 +111,32 @@ object Day04 extends App {
         else if (line == "" && l != "")
             // those leading spaces are a tripping hazard :)
             // https://stackoverflow.com/questions/7899525/how-to-split-a-string-by-space/7899558
-            bingoBoards += new bingoBoard(l.trim.split("\\s+", -1).toVector.map(_.toInt), i)
+            bingoCardsList += new bingoBoard(l.trim.split("\\s+", -1).toVector.map(_.toInt), i)
             i += 1
             l = ""
     }
     // pick up last board if there is one
-    if (l != "") bingoBoards += new bingoBoard(l.trim.split("\\s+", -1).toVector.map(_.toInt), i)
+    if (l != "") bingoCardsList += new bingoBoard(l.trim.split("\\s+", -1).toVector.map(_.toInt), i)
 
     val winningBoardsInOrder = ListBuffer[Int]()
 
     // play BINGO!
     def playBingoRound(n: Int): Unit = {
-        bingoBoards
+        bingoCardsList
           .zipWithIndex
-          .foreach( board => {
-              if (!board._1.bingo)
-                  val b = board._1.play(n)
+          .foreach(card => {
+              if (!card._1.bingo)
+                  val b = card._1.play(n)
                   //println(s"Board ${board._2}, play $n, bingo ${board._1.bingo}")
-                  if (b && winningBoardsInOrder.indexOf(board._2) < 0) {
-                      winningBoardsInOrder += board._2
+                  if (b && winningBoardsInOrder.indexOf(card._2) < 0) {
+                      winningBoardsInOrder += card._2
                   }
           })
     }
 
     def checkAllBoards(boards: ListBuffer[bingoBoard]): Vector[Int] = {
         val v =
-            for (b <- bingoBoards.indices if bingoBoards(b).bingo)
+            for (b <- bingoCardsList.indices if bingoCardsList(b).bingo)
                 yield b
         v.toVector
     }
@@ -149,15 +149,15 @@ object Day04 extends App {
         round += 1
         calledNumber = numberCaller(round)
         playBingoRound(calledNumber)
-        if (checkAllBoards(bingoBoards).length > 0)
+        if (checkAllBoards(bingoCardsList).length > 0)
             bingo = true
     }
 
-    val winningBoards = checkAllBoards(bingoBoards)
-    val winningBoard = if (winningBoards.isEmpty) -1 else winningBoards.head
+    val winningCards = checkAllBoards(bingoCardsList)
+    val winningCard = if (winningCards.isEmpty) -1 else winningCards.head
 
-    if (winningBoard != -1)
-        val y = bingoBoards(winningBoard).score()
+    if (winningCard != -1)
+        val y = bingoCardsList(winningCard).score()
         println(s"Day 4 Part 1 answer $y")
     else
         println("No winner this round")
@@ -166,12 +166,18 @@ object Day04 extends App {
 
     // Part Two.  Find and score the board that wins last.
 
-    // TODO: COMMENT out part 1 first BEFORE running part two - or add code to re-load the data
+    // re-set the bingo cards back to initial state
+    for (b <- bingoCardsList;
+        i <- b.markerList.indices)
+         b.markerList(i) = 0
+
+    for (b <- bingoCardsList)
+        b.bingo = false
 
     println("Play BINGO! with the Giant Squid: Round Two Let the Squid Win")
-    var round = -1
-    var calledNumber = -1
-    while (round < numberCaller.length-1 && winningBoardsInOrder.length <= bingoBoards.length) {
+    round = -1
+    calledNumber = -1
+    while (round < numberCaller.length-1 && winningBoardsInOrder.length <= bingoCardsList.length) {
         round += 1
         calledNumber = numberCaller(round)
         playBingoRound(calledNumber)
@@ -180,7 +186,7 @@ object Day04 extends App {
     val lastWinningBoard = if (winningBoardsInOrder.isEmpty) -1 else winningBoardsInOrder.last
 
     if (lastWinningBoard != -1)
-        val x = bingoBoards(lastWinningBoard).score()
+        val x = bingoCardsList(lastWinningBoard).score()
         println(s"Day 4 Part 2 score of last winning board, $lastWinningBoard, is $x")
     else
         println("Part 2 No winner this round")
