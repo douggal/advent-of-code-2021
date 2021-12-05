@@ -5,17 +5,14 @@ val m = scala.collection.mutable.ListBuffer[Int]()
 for (i <- 0 until 25) m += 0
 
 for (i <- 5 until 10) m(i) = 1
-
-for (grp <- m.grouped(5))
-    if (grp.toVector.sum == 5)
-        println("bingo")
-
 m(0) = 1
 m(4) = 1
 m(9) = 1
 m(14) = 1
 m(19) = 1
 m(24) = 1
+
+l.zip(m).filter(i => if (i(1)==0) true else false).map(i => i(0))
 
 println("Rows")
 for (grp <- l.sliding(5,5).toList)

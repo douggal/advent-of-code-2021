@@ -41,6 +41,7 @@ object Day04 extends App {
     // and the other to track which spots are marked
     class bingoBoard(val board: Vector[Int]) {
         private val _size = 5
+        var bingoNumber = -1
         var bingo = false
         // create a list 0's/1's to hold marked squares
         private val _markerList = ListBuffer[Int]()
@@ -51,12 +52,13 @@ object Day04 extends App {
                 val found = board.indexOf(n)
                 if (found != -1) {
                     _markerList(found) = 1
+                    checkBingo()
+                    if (bingo) bingoNumber = n
                 }
             }
-
         }
 
-        def checkBingo = {
+        def checkBingo() = {
             // check the rows
             for (grp <- _markerList.grouped(_size).toVector)
                 if (grp.sum == _size)
@@ -72,6 +74,18 @@ object Day04 extends App {
                 if (grp.toVector.sum == _size)
                     bingo = true
         }
+
+        def score: Int = {
+            // b = a board in the list of boards
+            /*
+            Start by finding the sum of all unmarked numbers on that board; in this case,
+            the sum is 188. Then, multiply that sum by the number that was just called
+            when the board won, 24, to get the final score
+            */
+            val sumUnmarked = board.zip(_markerList).filter(i => if (i(1)==0) true else false).map(i => i(0)).sum
+            if (bingo) sumUnmarked * bingoNumber else -1
+        }
+
     }
 
     // first to do item is to set up number caller from 1st line of input
@@ -100,7 +114,6 @@ object Day04 extends App {
         bingoBoards
           .foreach(b => {
               b.play(n)
-              b.checkBingo
           })
     }
 
@@ -108,9 +121,6 @@ object Day04 extends App {
         bingoBoards.filter(b => b.bingo == true).indices.toVector
     }
 
-    def scoreBingoBoard(i: Int): Int = {
-        0
-    }
 
     println("Play BINGO! with the Giant Squid")
     var bingo = false
@@ -128,7 +138,7 @@ object Day04 extends App {
     val winningBoard = if (winningBoards.isEmpty) -1 else winningBoards.head
 
     if (winningBoard != -1)
-        val score = scoreBingoBoard(winningBoard)
+        val score = bingoBoards(winningBoard).score
         println(s"Day 4 Part 1 answer $score")
     else
         println("No winner this round")
