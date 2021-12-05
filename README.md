@@ -13,7 +13,7 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 2. Day  2: Dive!
 3. Day  3: Binary Diagnostic
 4. Day  4: Giant Squid
-5. Day  5:  Hydrothermal Venture
+5. Day  5: Hydrothermal Venture
 
 ### Notes
 #### Day 01
@@ -31,5 +31,11 @@ typed in a "1" to first number line 1 of data in the file when saving the puzzle
 and 2) for part two I did not reload the data after part 1 completed.  
 
 #### Day 05
-Chose a representation of this sparse matrix that will work will
-with functional programming methods
+Chose to represent the layout of the hydrothermal vents of this sparse matrix 
+as parallel vectors that I thought
+would work well with functional programming methods
+
+1. Part 1: used an idea from Wikipedia 
+[Compressed sparse row (CSR, CRS or Yale format)](https://en.wikipedia.org/wiki/Sparse_matrix#Compressed_sparse_row_(CSR,_CRS_or_Yale_format)).
+Rather slow.  Run time (by the clock) was 237 secs with 200 of the 500 data points done by 30 secs.
+2. Part 2:  TBD

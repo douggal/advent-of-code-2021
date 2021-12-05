@@ -9,8 +9,8 @@ object Day05 extends App {
 
     println(s"--- Day 5: Hydrothermal Venture ---")
 
-    //val filename = "Day05Input.txt"
-    val filename = "testInput.txt"
+    val filename = "Day05Input.txt"
+    //val filename = "testInput.txt"
 
     // Try out a better read file w/Using object from Alexander, Alvin.
     // Scala Cookbook: Recipes for Object-Oriented and Functional Programming.
@@ -43,19 +43,25 @@ object Day05 extends App {
             b to a
     }
 
-    // debug: check input, should be 4 numbers separated by commas
+    // debug: visually check input, should be 4 numbers separated by commas
     // first two items are the start point and 2nd two are the end point of each line
-    input.foreach(line => println("%s".format(line)))
+    // input.foreach(line => println("%s".format(line)))
 
-    // represent the line segments as parallel lists
+    // represent the line segments as parallel lists with
+    // Compressed sparse row (CSR, CRS or Yale format)
     // z is the count of hits
     // index into z is index at which (x,y) is found in list x and list y
-    // https://en.wikipedia.org/wiki/Sparse_matrix
+    // Ref: https://en.wikipedia.org/wiki/Sparse_matrix
     val x = ListBuffer[Int]()
     val y = ListBuffer[Int]()
     val z = ListBuffer[Int]()
 
+    val t1 = System.nanoTime
+
+    var i =0
     for (line <- input) {
+        i+=1
+        println(s"Working row $i elapsed time ${(System.nanoTime - t1) / 1e9d}")
         /*
         Part 1: For now, only consider horizontal and vertical lines: lines where either x1 = x2 or y1 = y2
         */
@@ -91,7 +97,6 @@ object Day05 extends App {
                     // case 2 point does exist, update count
                     // find index of the point (x,y).
                     val q = x.zip(y).indexOf(t)
-                    println(s"Found $q")
                     z(q) += 1
                     val i = 0
                 }
@@ -100,10 +105,13 @@ object Day05 extends App {
     }
     //println(x.mkString(" , "))
     //println(y.mkString(" , "))
-    println(x.zip(y).mkString(" ,"))
-    println(z.mkString(" , "))
+    //println(x.zip(y).mkString(" ,"))
+    //println(z.mkString(" , "))
 
     val result = z.count(f => f > 1)
+
+    val duration = (System.nanoTime - t1) / 1e9d
+    println(s"Done: run time (by the clock): $duration sec")
 
     println(s"Day 5 Part 1 the number points at which line segments overlap ${result}")
 
