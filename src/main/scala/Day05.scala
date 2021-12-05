@@ -56,47 +56,53 @@ object Day05 extends App {
     val z = ListBuffer[Int]()
 
     for (line <- input) {
+        /*
+        Part 1: For now, only consider horizontal and vertical lines: lines where either x1 = x2 or y1 = y2
+        */
         val l = line.split(",").toVector.map(_.toInt)
-        val xs = getRange(l(0),l(2)).toVector
-        val ys = getRange(l(1),l(3)).toVector
-        // either the  x or y coordinate is same for every pair
-        // generate all the pairs xs with ys
-        // this is path followed from one endpoint to the other
-        // ref: https://stackoverflow.com/questions/27101500/scala-permutations-using-two-lists
-        val xys = if (ys.length == 1) {
-            for {
-                i1 <- xs
-            } yield (i1, ys.head)
-        } else {
-            for {
-                i2 <- ys
-            } yield (xs.head, i2)
-        }
-        // println(xys.mkString(" , "))
-        // for each point (Tuple2) generated:
-        //   populate x, y, z lists
-        xys.foreach(t => {
-            val (tx,ty) = t
-            if (!x.zip(y).contains(t)) {
-                // case 1 the point does not exist in x, y, z, add it
-                x.append(tx)
-                y.append(ty)
-                z.append(1)
+        if (l(0)==l(2)||l(1)==l(3)) {
+            val xs = getRange(l(0), l(2)).toVector
+            val ys = getRange(l(1), l(3)).toVector
+            // either the  x or y coordinate is same for every pair
+            // generate all the pairs xs with ys
+            // this is path followed from one endpoint to the other
+            // ref: https://stackoverflow.com/questions/27101500/scala-permutations-using-two-lists
+            val xys = if (ys.length == 1) {
+                for {
+                    i1 <- xs
+                } yield (i1, ys.head)
             } else {
-                // case 2 point does exist, update count
-                // find index of the point (x,y).  x.zip(y).zipWithIndex = Vector[((x,y),index)]
-                val q = x.zip(y).zipWithIndex.filter(f => (f._1._1==tx && f._1._2==ty) )
-                // if there's more than one point in q then mistake.  q.head._2 = index of this point in parallel lists
-                if (q.length > 1) println("Error")
-                z(q.head._2) += 1
-                val i = 0
+                for {
+                    i2 <- ys
+                } yield (xs.head, i2)
             }
-        })
+            //print("xys ")
+            //println(xys.mkString(" , "))
+            // for each point (Tuple2) generated:
+            //   populate x, y, z lists
+            xys.foreach(t => {
+                val (tx, ty) = t
+                if (!x.zip(y).contains(t)) {
+                    // case 1 the point does not exist in x, y, z, add it
+                    x.append(tx)
+                    y.append(ty)
+                    z.append(1)
+                } else {
+                    // case 2 point does exist, update count
+                    // find index of the point (x,y).
+                    val q = x.zip(y).indexOf(t)
+                    println(s"Found $q")
+                    z(q) += 1
+                    val i = 0
+                }
+            })
+        }
     }
     //println(x.mkString(" , "))
     //println(y.mkString(" , "))
-    println(z.mkString(" , "))
     println(x.zip(y).mkString(" ,"))
+    println(z.mkString(" , "))
+
     val result = z.count(f => f > 1)
 
     println(s"Day 5 Part 1 the number points at which line segments overlap ${result}")
