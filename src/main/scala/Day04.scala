@@ -58,12 +58,14 @@ object Day04 extends App {
 
         def checkBingo = {
             // check the rows
-            for (grp <- _markerList.grouped(5))
-                if (grp.toVector.sum == _size)
+            for (grp <- _markerList.grouped(_size).toVector)
+                if (grp.sum == _size)
                     bingo = true
 
             // check the columns
-            for (grp <- _markerList.sliding(5, 5))
+            for (n <- 0 until 5)
+                val grp = _markerList.drop(n).grouped(5).map(_.head).toList
+                //println(grp)
                 if (grp.toVector.sum == _size)
                     bingo = true
         }
