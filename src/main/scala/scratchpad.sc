@@ -12,15 +12,20 @@ m(14) = 1
 m(19) = 1
 m(24) = 1
 
+val m = List(1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1)
+
+
 l.zip(m).filter(i => if (i(1)==0) true else false).map(i => i(0))
 
 println("Rows")
-for (grp <- l.sliding(5,5).toList)
+for (grp <- m.sliding(5,5).toList)
     println(grp)
+    if (grp.toVector.sum == 5)
+        println("bingo")
 
 println("Columns")
 for (n <- 0 until 5)
-    val grp = l.drop(n).grouped(5).map(_.head).toList
+    val grp = m.drop(n).grouped(5).map(_.head).toList
     println(grp)
     if (grp.toVector.sum == 5)
         println("bingo")
