@@ -40,7 +40,7 @@ object Day05 extends App {
         if (a<=b)
             a to b
         else
-            b to a
+            a to b by -1
     }
 
     // debug: visually check input, should be 4 numbers separated by commas
@@ -111,8 +111,77 @@ object Day05 extends App {
     val result = z.count(f => f > 1)
 
     val duration = (System.nanoTime - t1) / 1e9d
-    println(s"Done: run time (by the clock): $duration sec")
+    println(s"Done: Part 1 run time (by the clock): $duration sec")
 
     println(s"Day 5 Part 1 the number points at which line segments overlap ${result}")
+
+
+
+
+    // Part 2: with diagonals
+
+    // add "d" to variable names to distinguish.
+
+    val xd = ListBuffer[Int]()
+    val yd = ListBuffer[Int]()
+    val zd = ListBuffer[Int]()
+
+    val t1d = System.nanoTime
+
+    i =0
+    for (line <- input) {
+        i+=1
+        println(s"Working row $i elapsed time ${(System.nanoTime - t1d) / 1e9d}")
+        /*
+        Part 2: consider 45 degree diagonals too
+        */
+        val l = line.split(",").toVector.map(_.toInt)
+        val xs = getRange(l(0), l(2)).toVector
+        val ys = getRange(l(1), l(3)).toVector
+        // either the  x or y coordinate is same for every pair
+        // generate all the pairs xs with ys
+        // this is path followed from one endpoint to the other
+        // ref: https://stackoverflow.com/questions/27101500/scala-permutations-using-two-lists
+        val xys = if (ys.length == 1) {
+            for {
+                i1 <- xs
+            } yield (i1, ys.head)
+        } else if (xs.length == 1) {
+            for {
+                i2 <- ys
+            } yield (xs.head, i2)
+        } else {
+            for {t <- xs.zip(ys)} yield t
+        }
+        // print("xys ")
+        // println(xys.mkString(" , "))
+        // for each point (Tuple2) generated:
+        //   populate x, y, z lists
+        xys.foreach(t => {
+            val (tx, ty) = t
+            if (!xd.zip(yd).contains(t)) {
+                // case 1 the point does not exist in x, y, z, add it
+                xd.append(tx)
+                yd.append(ty)
+                zd.append(1)
+            } else {
+                // case 2 point does exist, update count
+                // find index of the point (x,y).
+                val q = xd.zip(yd).indexOf(t)
+                zd(q) += 1
+            }
+        })
+    }
+    //println(xd.mkString(" , "))
+    //println(yd.mkString(" , "))
+    //println(xd.zip(yd).mkString(" ,"))
+    //println(zd.mkString(" , "))
+
+    val resultd = z.count(f => f > 1)
+
+    val durationd = (System.nanoTime - t1) / 1e9d
+    println(s"Done: Part 2 run time (by the clock): $durationd sec")
+
+    println(s"Day 5 Part 2 the number points at which line segments overlap ${resultd}")
 
 }
