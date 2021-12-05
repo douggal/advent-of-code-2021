@@ -118,9 +118,11 @@ object Day04 extends App {
     }
 
     def checkAllBoards(boards: ListBuffer[bingoBoard]): Vector[Int] = {
-        bingoBoards.filter(b => b.bingo == true).indices.toVector
+        val v =
+            for (b <- bingoBoards.indices if bingoBoards(b).bingo)
+                yield b
+        v.toVector
     }
-
 
     println("Play BINGO! with the Giant Squid")
     var bingo = false
