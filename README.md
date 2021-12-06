@@ -14,6 +14,7 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 3. Day  3: Binary Diagnostic
 4. Day  4: Giant Squid
 5. Day  5: Hydrothermal Venture
+6. Day  6: Lanternfish
 
 ### Notes
 #### Day 01
