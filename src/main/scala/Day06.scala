@@ -1,3 +1,4 @@
+import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.util.Using
 import scala.util.{Failure, Success, Try}
@@ -88,26 +89,35 @@ object Day06 extends App {
 
     val days2 = 256
 
+    class genCount(var gen:Int = 0, var cnt:Int = 0) {
+        override def toString: String =
+            s"($gen, $cnt)"
+    }
+
     def runSimulation(gen0: Vector[Int], days: Int, g: Int):BigInt = {
         // gen0 = list of ages of starting group of fish
         // fishes = array tracking each fish represented by its age
         // g is group number used only to debug and track workings of this function
-        var fishes = ArrayBuffer[Int]()
-        for (f <- gen0.indices) fishes += f
+        var fishes = scala.collection.mutable.HashMap[Int, BigInt]()
+        for (f <- 0 to 8) fishes += f -> 0
+        for (f <- gen0) fishes(f) += 1
         var i = 0
         for (i <- 0 until days) {
-            val nfs = fishes.count(f => f == 0)  // new fishes
-            fishes = fishes.map(f => if (f == 0) 6 else f-1)
-            fishes ++= (for (nf <- 0 until nfs) yield 8).toList
-            if (g % 10 == 0) println(s"Group $g, Generation $i, fish count ${fishes.length}")
+            val nfs = fishes(0)  // new fishes
+            val fs = fishes.values.drop(1)
+            for (f <- fs.zipWithIndex) fishes(f._2-1) = f._1  // everybody gets one day older, cnt at 8 moves to 7 etc
+            // spawn: 0 becomes a 6 and add new 8
+            fishes(6) = fishes(6) + nfs
+            fishes(8) = nfs
+            if (g % 10 == 0) println(s"Group $g, Generation $i, fish count ${fishes.mkString(":")}")
         }
-        println(s"** Done ** Group $g, Generation $i, fish count ${fishes.length}")
-        fishes.length
+        //println(s"** Done ** Group $g, Generation $i, fish count ${fishes.length}")
+        fishes.values.sum
     }
 
     val c = ListBuffer[BigInt]()  // counts from each run
     // sliding window with group of size 8
-    for (gen0 <- fishStart.grouped(1).zipWithIndex) {
+    for (gen0 <- fishStart.grouped(8).zipWithIndex) {
         c += runSimulation(gen0._1, days2, gen0._2)
     }
 
