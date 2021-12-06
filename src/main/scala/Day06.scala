@@ -11,8 +11,8 @@ object Day06 extends App {
     println(s"--- Day 6: Lanternfish ---")
 
     // Puzzle Input Data File
-    val filename = "Day06Input.txt"
-    //val filename = "testInput.txt"
+    //val filename = "Day06Input.txt"
+    val filename = "testInput.txt"
 
     //region Read puzzle input file into Vector[String] 'input'
     // Try out a better read file w/Using object from Alexander, Alvin.
@@ -77,53 +77,40 @@ object Day06 extends App {
 
 
     // part 2
-    // try divide an conquer create two threads and run have the fish simulation on one and rest on the other
-    // each fish is independent of the others so should be able to divide the list anywhere.
+    // try 1 failed: try divide an conquer create two threads and run have the fish simulation on one and rest on the other
+    // try 2 success:  group the fish by age in a HashMap with values count of how many at that age.
     val t2 = System.nanoTime
-
-    var fish2a = ArrayBuffer[Int]()
-    for (f <- fishStart.take(fishStart.length / 2)) fish2a += f
-    var fish2b = ArrayBuffer[Int]()
-    val half = if ((fishStart.length % 2) == 0) (fishStart.length/2) else (fishStart.length/2+1)
-    for (f <- fishStart.drop(half)) fish2b += f
 
     val days2 = 256
 
-    class genCount(var gen:Int = 0, var cnt:Int = 0) {
-        override def toString: String =
-            s"($gen, $cnt)"
-    }
-
-    def runSimulation(gen0: Vector[Int], days: Int, g: Int):BigInt = {
+    def runSimulation(gen0: Vector[Int], days: Int):BigInt = {
         // gen0 = list of ages of starting group of fish
         // fishes = array tracking each fish represented by its age
         // g is group number used only to debug and track workings of this function
         var fishes = scala.collection.mutable.HashMap[Int, BigInt]()
         for (f <- 0 to 8) fishes += f -> 0
-        for (f <- gen0) fishes(f) += 1
-        var i = 0
+        for (f <- gen0) fishes(f) += 1  // transform list of ages into counts by age
         for (i <- 0 until days) {
-            val nfs = fishes(0)  // new fishes
-            val fs = fishes.values.drop(1)
-            for (f <- fs.zipWithIndex) fishes(f._2-1) = f._1  // everybody gets one day older, cnt at 8 moves to 7 etc
-            // spawn: 0 becomes a 6 and add new 8
+            val nfs = fishes(0)  // number of new fishes = number who reached age 0
+            val fs = for (j<- 1 to 8) yield fishes(j)  // everybody gets one day older, handle 0 to 6 and new fish after
+            for (f <- fs.zipWithIndex) fishes(f._2) = f._1  // in the HashMap move up the cnt at 8 to 7 etc
+            // spawn: each 0 becomes another fish at age 6
             fishes(6) = fishes(6) + nfs
+            // add new fish count at age 8 is number of fish who spawned at age 0
             fishes(8) = nfs
-            if (g % 10 == 0) println(s"Group $g, Generation $i, fish count ${fishes.mkString(":")}")
+            println(s"Generation $i, fish count ${fishes.values.sum} ${fishes.mkString(", ")}")
         }
-        //println(s"** Done ** Group $g, Generation $i, fish count ${fishes.length}")
+        //println(s"Group $g, Generation $i, fish count ${fishes.mkString(":")}")
         fishes.values.sum
     }
 
-    val c = ListBuffer[BigInt]()  // counts from each run
-    // sliding window with group of size 8
-    for (gen0 <- fishStart.grouped(8).zipWithIndex) {
-        c += runSimulation(gen0._1, days2, gen0._2)
-    }
+    val c = runSimulation(fishStart,days2)
 
     val duration2 = (System.nanoTime - t2) / 1e9d
     println(s"Done: Part 2 run time (by the clock): $duration2 sec")
 
-    println(s"Day 6 Part 2 the number of lanternfish after $days2 is ${c.sum}")
+    println(s"Day 6 Part 2 the number of lanternfish after $days2 is ${c}")
+
+    // 1st try: to low  1128945478452
 
 }
