@@ -88,32 +88,38 @@ object Day06 extends App {
     var fish2b = ArrayBuffer[Int]()
     for (f <- fishStart.drop(fishStart.length/2)) fish2b += f
 
-    val days2 = 256
+    val days2 = 80
     val da = days2 / 2
-    val db = da + 1
-
+    val db = if (da % 2 == 0) da else da + 1
     val threada = new Thread {
         override def run() = {
             for (i <- 0 until da) {
                 val nfs = fish2a.count(f => f == 0)  // new fishes
                 fish2a = fish2a.map(f => if (f == 0) 6 else f-1)
                 fish2a ++= (for (nf <- 0 until nfs) yield 8).toList
-                if (i % 10 == 0) println(s"Thread A Generated $i")
+                println(s"Thread A Generation $i, fish group A ${fish2a.length}")
             }
         }
     }
+    threada.start()
     val threadb = new Thread {
         override def run() = {
             for (i <- 0 until db) {
                 val nfs = fish2b.count(f => f == 0)  // new fishes
                 fish2b = fish2b.map(f => if (f == 0) 6 else f-1)
                 fish2b ++= (for (nf <- 0 until nfs) yield 8).toList
-                if (i % 10 == 0) println(s"Thread A Generated $i")
+                println(s"Thread B Generation $i, fish group B ${fish2b.length}")
             }
         }
     }
-    threadb.start
+    threadb.start()
 
+    //threada.join()
+    //threadb.join()
+
+    // await threads to complete
+    println(threada)
+    println(threadb)
 
     val duration2 = (System.nanoTime - t2) / 1e9d
     println(s"Done: Part 2 run time (by the clock): $duration2 sec")
