@@ -77,8 +77,9 @@ object Day06 extends App {
 
 
     // part 2
-    // try 1 failed: try divide an conquer create two threads and run have the fish simulation on one and rest on the other
-    // try 2 success:  group the fish by age in a HashMap with values count of how many at that age.
+    // try 0 failed:  numbers get too big after 100 generations, part 1 method won't work
+    // try 1 failed: try divide an conquer - create two threads and run have the fish simulation on one and rest on the other
+    // try 2 success:  aggregate the fish by age in a HashMap with values the count of how many at that age.
     val t2 = System.nanoTime
 
     val days2 = 256
