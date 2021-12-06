@@ -9,8 +9,9 @@ object Day06 extends App {
 
     println(s"--- Day 6: Lanternfish ---")
 
-    //al filename = "Day06Input.txt"
-    val filename = "testInput.txt"
+    // Puzzle Input Data File
+    val filename = "Day06Input.txt"
+    //val filename = "testInput.txt"
 
     //region Read puzzle input file into Vector[String] 'input'
     // Try out a better read file w/Using object from Alexander, Alvin.
@@ -53,19 +54,19 @@ object Day06 extends App {
     val fishStart = input.head.split(",").map(_.toInt).toVector
     //println(s"Fish as vector of int: ${input.mkString(", ")}")
 
-    // let's try modeling the fish as an ArrayBuffer
+    // part 1: let's try modeling the fish as an ArrayBuffer
     var fish = ArrayBuffer[Int]()
     for (f <- fishStart) fish += f
 
-    val days = 18
+    val days = 80
     for (i <- 0 until days) {
             val nfs = fish.count(f => f == 0)  // new fishes
             fish = fish.map(f => if (f == 0) 6 else f-1)
             fish ++= (for (nf <- 0 until nfs) yield 8).toList
-            //println(fish.mkString(", "))
+            if (i % 10 == 0) println(s"Generated $i")
     }
 
-    println(s"${fish.mkString(", ")}")
+    //println(s"${fish.mkString(", ")}")
 
 
     val duration = (System.nanoTime - t1) / 1e9d
