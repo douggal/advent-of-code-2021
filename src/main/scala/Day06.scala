@@ -11,8 +11,8 @@ object Day06 extends App {
     println(s"--- Day 6: Lanternfish ---")
 
     // Puzzle Input Data File
-    //val filename = "Day06Input.txt"
-    val filename = "testInput.txt"
+    val filename = "Day06Input.txt"
+    //val filename = "testInput.txt"
 
     //region Read puzzle input file into Vector[String] 'input'
     // Try out a better read file w/Using object from Alexander, Alvin.
