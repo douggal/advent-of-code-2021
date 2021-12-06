@@ -9,9 +9,10 @@ object Day06 extends App {
 
     println(s"--- Day 6: ??? ---")
 
-    val filename = "Day06Input.txt"
-    //val filename = "testInput.txt"
+    //al filename = "Day06Input.txt"
+    val filename = "testInput.txt"
 
+    //region Read puzzle input file into Vector[String] 'input'
     // Try out a better read file w/Using object from Alexander, Alvin.
     // Scala Cookbook: Recipes for Object-Oriented and Functional Programming.
     // Second Edition. Beijing Boston: O’Reilly, 2021.
@@ -35,9 +36,15 @@ object Day06 extends App {
         case Failure(s) =>
             println(s"Failed to read input file, message is: $s")
             Vector[String]()
-
+    //endregion
 
     val t1 = System.nanoTime
+
+
+
+
+
+
 
 
 
@@ -45,6 +52,5 @@ object Day06 extends App {
     println(s"Done: Part 1 run time (by the clock): $duration sec")
 
     println(s"Day 6 Part 1 the number points at which line segments overlap TBD")
-
 
 }
