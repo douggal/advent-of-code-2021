@@ -107,7 +107,7 @@ object Day06 extends App {
 
     val c = ListBuffer[BigInt]()  // counts from each run
     // sliding window with group of size 8
-    for (gen0 <- fishStart.grouped(8).zipWithIndex) {
+    for (gen0 <- fishStart.grouped(1).zipWithIndex) {
         c += runSimulation(gen0._1, days2, gen0._2)
     }
 
