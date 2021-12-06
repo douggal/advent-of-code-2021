@@ -80,50 +80,40 @@ object Day06 extends App {
     // each fish is independent of the others so should be able to divide the list anywhere.
     val t2 = System.nanoTime
 
-    // ref: scala thread example
-    // https://alvinalexander.com/scala/how-to-create-java-thread-runnable-in-scala/
-
     var fish2a = ArrayBuffer[Int]()
-    for (f <- fishStart.take(fishStart.length/2)) fish2a += f
+    for (f <- fishStart.take(fishStart.length / 2)) fish2a += f
     var fish2b = ArrayBuffer[Int]()
-    for (f <- fishStart.drop(fishStart.length/2)) fish2b += f
+    val half = if ((fishStart.length % 2) == 0) (fishStart.length/2) else (fishStart.length/2+1)
+    for (f <- fishStart.drop(half)) fish2b += f
 
-    val days2 = 80
-    val da = days2 / 2
-    val db = if (da % 2 == 0) da else da + 1
-    val threada = new Thread {
-        override def run() = {
-            for (i <- 0 until da) {
-                val nfs = fish2a.count(f => f == 0)  // new fishes
-                fish2a = fish2a.map(f => if (f == 0) 6 else f-1)
-                fish2a ++= (for (nf <- 0 until nfs) yield 8).toList
-                println(s"Thread A Generation $i, fish group A ${fish2a.length}")
-            }
+    val days2 = 256
+
+    def runSimulation(gen0: Vector[Int], days: Int, g: Int):BigInt = {
+        // gen0 = list of ages of starting group of fish
+        // fishes = array tracking each fish represented by its age
+        // g is group number used only to debug and track workings of this function
+        var fishes = ArrayBuffer[Int]()
+        for (f <- gen0.indices) fishes += f
+        var i = 0
+        for (i <- 0 until days) {
+            val nfs = fishes.count(f => f == 0)  // new fishes
+            fishes = fishes.map(f => if (f == 0) 6 else f-1)
+            fishes ++= (for (nf <- 0 until nfs) yield 8).toList
+            if (g % 10 == 0) println(s"Group $g, Generation $i, fish count ${fishes.length}")
         }
+        println(s"** Done ** Group $g, Generation $i, fish count ${fishes.length}")
+        fishes.length
     }
-    threada.start()
-    val threadb = new Thread {
-        override def run() = {
-            for (i <- 0 until db) {
-                val nfs = fish2b.count(f => f == 0)  // new fishes
-                fish2b = fish2b.map(f => if (f == 0) 6 else f-1)
-                fish2b ++= (for (nf <- 0 until nfs) yield 8).toList
-                println(s"Thread B Generation $i, fish group B ${fish2b.length}")
-            }
-        }
+
+    val c = ListBuffer[BigInt]()  // counts from each run
+    // sliding window with group of size 8
+    for (gen0 <- fishStart.grouped(8).zipWithIndex) {
+        c += runSimulation(gen0._1, days2, gen0._2)
     }
-    threadb.start()
-
-    //threada.join()
-    //threadb.join()
-
-    // await threads to complete
-    println(threada)
-    println(threadb)
 
     val duration2 = (System.nanoTime - t2) / 1e9d
     println(s"Done: Part 2 run time (by the clock): $duration2 sec")
 
-    println(s"Day 6 Part 2 the number of lanternfish after $days is ${fish2a.length+fish2b.length}")
+    println(s"Day 6 Part 2 the number of lanternfish after $days2 is ${c.sum}")
 
 }

@@ -2,6 +2,8 @@ import scala.collection.mutable.ArrayBuffer
 
 var fish = ArrayBuffer[Int](0,1,2,3,4,5,6)
 
+for (f <- fish.grouped(3)) println(f.mkString(", "))
+
 (for (nf <- fish) yield 8).toList
 
 println(s"${fish.mkString(", ")} (start)")
