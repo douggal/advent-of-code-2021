@@ -9,8 +9,8 @@ object Day05 extends App {
 
     println(s"--- Day 5: Hydrothermal Venture ---")
 
-    //val filename = "Day05Input.txt"
-    val filename = "testInput.txt"
+    val filename = "Day05Input.txt"
+    //val filename = "testInput.txt"
 
     // Try out a better read file w/Using object from Alexander, Alvin.
     // Scala Cookbook: Recipes for Object-Oriented and Functional Programming.
