@@ -9,8 +9,8 @@ object Day05 extends App {
 
     println(s"--- Day 5: Hydrothermal Venture ---")
 
-    val filename = "Day05Input.txt"
-    //val filename = "testInput.txt"
+    //val filename = "Day05Input.txt"
+    val filename = "testInput.txt"
 
     // Try out a better read file w/Using object from Alexander, Alvin.
     // Scala Cookbook: Recipes for Object-Oriented and Functional Programming.
@@ -59,9 +59,10 @@ object Day05 extends App {
     val t1 = System.nanoTime
 
     var i =0
+    var part = "1"
     for (line <- input) {
         i+=1
-        println(s"Working row $i elapsed time ${(System.nanoTime - t1) / 1e9d}")
+        println(f"Part $part, row $i, ${(System.nanoTime - t1) / 1e9d}")
         /*
         Part 1: For now, only consider horizontal and vertical lines: lines where either x1 = x2 or y1 = y2
         */
@@ -129,9 +130,10 @@ object Day05 extends App {
     val t1d = System.nanoTime
 
     i =0
+    part = "2"
     for (line <- input) {
         i+=1
-        println(s"Working row $i elapsed time ${(System.nanoTime - t1d) / 1e9d}")
+        println(s"Part $part, row $i, ${(System.nanoTime - t1d) / 1e9d}")
         /*
         Part 2: consider 45 degree diagonals too
         */
@@ -177,7 +179,7 @@ object Day05 extends App {
     //println(xd.zip(yd).mkString(" ,"))
     //println(zd.mkString(" , "))
 
-    val resultd = z.count(f => f > 1)
+    val resultd = zd.count(f => f > 1)
 
     val durationd = (System.nanoTime - t1) / 1e9d
     println(s"Done: Part 2 run time (by the clock): $durationd sec")

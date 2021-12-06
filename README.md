@@ -38,4 +38,5 @@ would work well with functional programming methods
 1. Part 1: used an idea from Wikipedia 
 [Compressed sparse row (CSR, CRS or Yale format)](https://en.wikipedia.org/wiki/Sparse_matrix#Compressed_sparse_row_(CSR,_CRS_or_Yale_format)).
 Rather slow.  Run time (by the clock) was 237 secs with 200 of the 500 data points done by 30 secs.
-2. Part 2:  TBD
+2. Part 2:  Part 2 run time (by the clock): 928 sec
+
