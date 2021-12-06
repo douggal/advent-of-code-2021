@@ -5,10 +5,15 @@ Advent of Code Website:  [Advent of Code](https://adventofcode.com)
 
 My solution to each day's puzzles.  In Scala 3 unless otherwise noted.
 
+My goals for this year's AoC are to have fun, to improve my understanding of functional
+programming techniques with use, and to learn [Scala](https://www.scala-lang.org) programming language.
+Some algorithms chosen were my attempt to exercise functional programming techniques.
+
 1. Day  1: Sonar Sweep
 2. Day  2: Dive!
 3. Day  3: Binary Diagnostic
 4. Day  4: Giant Squid
+5. Day  5: Hydrothermal Venture
 
 ### Notes
 #### Day 01
@@ -24,3 +29,14 @@ Is there a way to avoid nested loops (maybe a built-in transpose function)?
 Completed Part Two at 3 minutes before midnight on the 4th.  I made two mistakes: 1) somehow
 typed in a "1" to first number line 1 of data in the file when saving the puzzle input, 
 and 2) for part two I did not reload the data after part 1 completed.  
+
+#### Day 05
+Chose to represent the layout of the hydrothermal vents of this sparse matrix 
+as parallel vectors that I thought
+would work well with functional programming methods
+
+1. Part 1: used an idea from Wikipedia 
+[Compressed sparse row (CSR, CRS or Yale format)](https://en.wikipedia.org/wiki/Sparse_matrix#Compressed_sparse_row_(CSR,_CRS_or_Yale_format)).
+Rather slow.  Run time (by the clock) was 237 secs with 200 of the 500 data points done by 30 secs.
+2. Part 2:  Part 2 run time (by the clock): 928 sec
+
