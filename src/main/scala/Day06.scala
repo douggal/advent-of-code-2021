@@ -74,4 +74,50 @@ object Day06 extends App {
 
     println(s"Day 6 Part 1 the number of lanternfish after $days is ${fish.length}")
 
+
+    // part 2
+    // try divide an conquer create two threads and run have the fish simulation on one and rest on the other
+    // each fish is independent of the others so should be able to divide the list anywhere.
+    val t2 = System.nanoTime
+
+    // ref: scala thread example
+    // https://alvinalexander.com/scala/how-to-create-java-thread-runnable-in-scala/
+
+    var fish2a = ArrayBuffer[Int]()
+    for (f <- fishStart.take(fishStart.length/2)) fish2a += f
+    var fish2b = ArrayBuffer[Int]()
+    for (f <- fishStart.drop(fishStart.length/2)) fish2b += f
+
+    val days2 = 256
+    val da = days2 / 2
+    val db = da + 1
+
+    val threada = new Thread {
+        override def run() = {
+            for (i <- 0 until da) {
+                val nfs = fish2a.count(f => f == 0)  // new fishes
+                fish2a = fish2a.map(f => if (f == 0) 6 else f-1)
+                fish2a ++= (for (nf <- 0 until nfs) yield 8).toList
+                if (i % 10 == 0) println(s"Thread A Generated $i")
+            }
+        }
+    }
+    val threadb = new Thread {
+        override def run() = {
+            for (i <- 0 until db) {
+                val nfs = fish2b.count(f => f == 0)  // new fishes
+                fish2b = fish2b.map(f => if (f == 0) 6 else f-1)
+                fish2b ++= (for (nf <- 0 until nfs) yield 8).toList
+                if (i % 10 == 0) println(s"Thread A Generated $i")
+            }
+        }
+    }
+    threadb.start
+
+
+    val duration2 = (System.nanoTime - t2) / 1e9d
+    println(s"Done: Part 2 run time (by the clock): $duration2 sec")
+
+    println(s"Day 6 Part 2 the number of lanternfish after $days is ${fish2a.length+fish2b.length}")
+
 }
