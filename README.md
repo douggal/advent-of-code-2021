@@ -15,6 +15,7 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 4. Day  4: Giant Squid
 5. Day  5: Hydrothermal Venture
 6. Day  6: Lanternfish
+7. Day  7: The Treachery of Whales
 
 ### Notes
 #### Day 01
@@ -41,3 +42,9 @@ would work well with functional programming methods
 Rather slow.  Run time (by the clock) was 237 secs with 200 of the 500 data points done by 30 secs.
 2. Part 2:  Part 2 run time (by the clock): 928 sec
 
+#### Day 06
+Part 1:  success modeled the fish as an ArrayBuffer
+Part 2:
+a. try 0 failed:  numbers get too big after 100 generations, part 1 method won't work
+b. try 1 failed: try divide an conquer - create two threads and run have the fish simulation on one and rest on the other
+c. try 2 success:  aggregate the fish by age in a HashMap with values the count of how many at that age.
