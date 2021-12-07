@@ -48,3 +48,5 @@ Part 2:
 a. try 0 failed:  numbers get too big after 100 generations, part 1 method won't work
 b. try 1 failed: try divide an conquer - create two threads and run have the fish simulation on one and rest on the other
 c. try 2 success:  aggregate the fish by age in a HashMap with values the count of how many at that age.
+
+#### Day 07
