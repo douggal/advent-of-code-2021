@@ -55,11 +55,26 @@ object Day07 extends App {
 
     val answer = ds.map(p => p._2).min
 
+    // https://stackoverflow.com/questions/37884493/scala-get-values-from-somevalue
+    val position: Int = ds.find(p => p._2 == answer).map(p => p._1) match {
+        case None => -9999 //Or handle the lack of a value another way: throw an error, etc.
+        case Some(i: Int) => i //return the string to set your value
+    }
 
     val duration = (System.nanoTime - t1) / 1e9d
     println(s"Done: Part 1 run time (by the clock): $duration sec")
     println(s"Number of crab submarines ${cs.length}")
 
-    println(s"Day 7 Part 1 the point of minimum fuel use is: $answer")  //323647
+    println(s"Day 7 Part 1 the minimum fuel use is: $answer at position $position")  //323647
+
+    // Part 2
+    val t2 = System.nanoTime
+
+    val duration2 = (System.nanoTime - t2) / 1e9d
+    println(s"Done: Part 2 run time (by the clock): $duration2 sec")
+
+    println(s"Day 7 Part 2 the minimum fuel use is: TBD")  //323647
+
+
 
 }
