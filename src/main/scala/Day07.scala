@@ -45,13 +45,14 @@ object Day07 extends App {
     val diff = cs.max - cs.min
     val ll = cs.min - diff  // left limit   ???
     val rl = cs.max + diff  // right limit  ???
+    // ds = absolute value of difference (distance) at each point
     val ds = for (i <- ll to rl)  yield (i, cs.map(c => Math.abs(c - i)).sum)
 
     /*
     Determine the horizontal position that the crabs can align to using the least fuel possible.
     How much fuel must they spend to align to that position?
     */
-    println(ds.mkString(", "))
+    //println(ds.mkString(", "))
 
     val answer = ds.map(p => p._2).min
 
@@ -70,11 +71,32 @@ object Day07 extends App {
     // Part 2
     val t2 = System.nanoTime
 
+    /*
+    As it turns out, crab submarine engines don't burn fuel at a constant rate.
+    Instead, each change of 1 step in horizontal position costs 1 more unit of fuel than the last:
+    the first step costs 1, the second step costs 2, the third step costs 3, and so on.
+    1 to 5 then costs 1 + 2 + 3 + 4
+    */
+    def seriesSum(min:Int, max:Int):Int = {
+        // sum of arithmetic series https://en.wikipedia.org/wiki/Arithmetic_progression
+        val d = Math.abs(max-min)
+        (d*(d + 1)) / 2
+    }
+
+    val ds2 = for (i <- ll to rl)  yield (i, cs.map(c => seriesSum(c, i)).sum)
+
+    println(ds2.mkString(", "))
+
+    val answer2 = ds2.map(p => p._2).min
+
+    // https://stackoverflow.com/questions/37884493/scala-get-values-from-somevalue
+    val position2: Int = ds2.find(p => p._2 == answer2).map(p => p._1) match {
+        case None => -9999 //Or handle the lack of a value another way: throw an error, etc.
+        case Some(i: Int) => i //return the string to set your value
+    }
+
     val duration2 = (System.nanoTime - t2) / 1e9d
     println(s"Done: Part 2 run time (by the clock): $duration2 sec")
 
-    println(s"Day 7 Part 2 the minimum fuel use is: TBD")  //323647
-
-
-
+    println(s"Day 7 Part 2 the minimum fuel use is: ${answer2} at position $position2")
 }
