@@ -77,7 +77,7 @@ object Day07 extends App {
     the first step costs 1, the second step costs 2, the third step costs 3, and so on.
     1 to 5 then costs 1 + 2 + 3 + 4
     */
-    def seriesSum(min:Int, max:Int):Int = {
+    def seriesSum(min:Int, max:Int):BigInt = {
         // sum of arithmetic series https://en.wikipedia.org/wiki/Arithmetic_progression
         val d = Math.abs(max-min)
         (d*(d + 1)) / 2
