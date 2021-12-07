@@ -60,6 +60,6 @@ object Day07 extends App {
     println(s"Done: Part 1 run time (by the clock): $duration sec")
     println(s"Number of crab submarines ${cs.length}")
 
-    println(s"Day 7 Part 1 the point of minimum fuel use is: $answer")
+    println(s"Day 7 Part 1 the point of minimum fuel use is: $answer")  //323647
 
 }
