@@ -7,21 +7,21 @@ object Day08 extends App {
     println(s"--- Day 8: Seven Segment Search ---")
 
     // Puzzle Input Data File
-    val filename = "Day08Input.txt"
-    //val filename = "testInput.txt"
+    //val filename = "Day08Input.txt"
+    val filename = "testInput.txt"
 
     // make a note of all ten unique signal patterns you see,
     // and then write down a single four digit output value (your puzzle input)
     // Each entry consists of
-    // sp = ten unique signal patterns, and
-    // fdo = the four digit output value
+    //  sp = ten unique signal patterns, and
+    //  fdo = the four digit output value
     case class inputLine(sp: Vector[String], fdo: Vector[String])
 
     val readInputData = () => {
         val source = io.Source.fromFile(filename)
         for {
             line <- source.getLines().toVector
-            cols = line.strip.replace("|","").split("\\s+").map(_.trim)   // split on either space or | ???
+            cols = line.split("[| ]+").map(_.trim)   // split on either space or | ???
         } yield
             inputLine(Vector[String](cols(0),cols(1),cols(2),cols(3),cols(4),cols(5),
             cols(6),cols(7),cols(8),cols(9)),
@@ -30,12 +30,14 @@ object Day08 extends App {
 
     val input = readInputData()
 
+    println("------------------------------------")
     println(s"Each line is a: ${input.getClass}")
     println(s"Number lines: ${input.length}")
     println(s"Input first line: ${input.head}")
     println(s"Input last line: ${input.tail.last}")
+    println("------------------------------------")
 
-//    for (line <- input) {
+    //    for (line <- input) {
 //        println(line)
 //    }
 
