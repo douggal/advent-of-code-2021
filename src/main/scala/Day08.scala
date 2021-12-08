@@ -30,16 +30,18 @@ object Day08 extends App {
 
     val input = readInputData()
 
+    //    for (line <- input) {
+//        println(line)
+//    }
+
     println("------------------------------------")
+    println(s"Timestamp ${java.time.ZonedDateTime.now()}")
     println(s"Each line is a: ${input.getClass}")
     println(s"Number lines: ${input.length}")
     println(s"Input first line: ${input.head}")
     println(s"Input last line: ${input.tail.last}")
     println("------------------------------------")
 
-    //    for (line <- input) {
-//        println(line)
-//    }
 
     // Part 1
     val t1 = System.nanoTime
@@ -59,5 +61,5 @@ object Day08 extends App {
     println(s"Done: Part 1 run time (by the clock): $duration1 sec")
 
     println(s"Day 8 Part 1 the number of times do digits 1, 4, 7, or 8 appear is: $answer1")
-
+    println(s"End at ${java.time.ZonedDateTime.now()}")
 }
