@@ -7,8 +7,8 @@ object Day08 extends App {
     println(s"--- Day 8: Seven Segment Search ---")
 
     // Puzzle Input Data File
-    //val filename = "Day08Input.txt"
-    val filename = "testInput.txt"
+    val filename = "Day08Input.txt"
+    //val filename = "testInput.txt"
 
     // make a note of all ten unique signal patterns you see,
     // and then write down a single four digit output value (your puzzle input)
@@ -32,11 +32,12 @@ object Day08 extends App {
 
     println(s"Each line is a: ${input.getClass}")
     println(s"Number lines: ${input.length}")
-    println("Input data:")
+    println(s"Input first line: ${input.head}")
+    println(s"Input last line: ${input.tail.last}")
 
-    for (line <- input) {
-        println(line)
-    }
+//    for (line <- input) {
+//        println(line)
+//    }
 
     // Part 1
     val t1 = System.nanoTime
@@ -48,12 +49,12 @@ object Day08 extends App {
     // In the output values, how many times do digits 1, 4, 7, or 8 appear?
     // lod = length of each output digit string
     val lod = input.flatMap(l => l.fdo.map(s => s.length))
-    println(lod)
+    //println(lod)
 
     val answer1 = lod.count(d => d == 2 || d == 4 || d == 3 || d == 7)
 
-    val duration = (System.nanoTime - t1) / 1e9d
-    println(s"Done: Part 1 run time (by the clock): $duration sec")
+    val duration1 = (System.nanoTime - t1) / 1e9d
+    println(s"Done: Part 1 run time (by the clock): $duration1 sec")
 
     println(s"Day 8 Part 1 the number of times do digits 1, 4, 7, or 8 appear is: $answer1")
 
