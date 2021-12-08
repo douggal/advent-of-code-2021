@@ -7,49 +7,54 @@ object Day08 extends App {
     println(s"--- Day 8: Seven Segment Search ---")
 
     // Puzzle Input Data File
-    val filename = "Day08Input.txt"
-    //val filename = "testInput.txt"
+    //val filename = "Day08Input.txt"
+    val filename = "testInput.txt"
 
     // make a note of all ten unique signal patterns you see,
     // and then write down a single four digit output value (your puzzle input)
     // Each entry consists of
     // sp = ten unique signal patterns, and
     // fdo = the four digit output value
-    case class in(sp: Vector[String], fdo: Vector[String])
+    case class inputLine(sp: Vector[String], fdo: Vector[String])
 
-    //region Read puzzle input file into Vector[String] 'input'
-    // Try out a better read file w/Using object from Alexander, Alvin.
-    // Scala Cookbook: Recipes for Object-Oriented and Functional Programming.
-    // Second Edition. Beijing Boston: O’Reilly, 2021.
-    def readFileAsSeq(filename: String): Try[Vector[String]] =
-        Using(io.Source.fromFile(filename)) { bufferedSource =>
-            val ucLines = for
-                line <- bufferedSource.getLines
-            // 'line' is a String. can work with each Char here,
-            // if desired, like this:
-            // char <- line
-            yield
-                // work with each 'line' as a String here
-                line.strip
-            ucLines.toVector
-        }
-    // read the input file and with a check for success or failure
-    val input: Vector[String] = readFileAsSeq(filename) match
-        case Success(i) =>
-            println(s"Success, puzzle input file read")
-            i
-        case Failure(s) =>
-            println(s"Failed to read input file, message is: $s")
-            Vector[String]()
-    //endregion
+    val readInputData = () => {
+        val source = io.Source.fromFile(filename)
+        for {
+            line <- source.getLines().drop(1).toVector
+            cols = line.strip.replace("|","").split("\\s+").map(_.trim)   // split on either space or | ???
+        } yield
+            inputLine(Vector[String](cols(0),cols(1),cols(2),cols(3),cols(4),cols(5),
+            cols(6),cols(7),cols(8),cols(9)),
+            Vector[String](cols(10),cols(11),cols(12),cols(13)))
+    }
+
+    val input = readInputData()
+
+    println(s"Each line is a: ${input.getClass}")
+    println(s"Number lines: ${input.length}")
+    println("Input data:")
+
+    for (line <- input) {
+        println(line)
+    }
 
     // Part 1
     val t1 = System.nanoTime
 
+    val digitMap = scala.collection.immutable.HashMap[Int,String](
+        0 -> "abcefg", 1 -> "cf", 2 -> "acdeg", 3 -> "acdfg", 4->"bcdf",
+        5-> "abdfg", 6->"abdefg",7->"acf",8->"abcdef",9->"abcdfg")
+
+    // In the output values, how many times do digits 1, 4, 7, or 8 appear?
+    // lod = length of each output digit string
+    val lod = input.flatMap(l => l.fdo.map(i => i.length))
+    println(lod)
+
+    val answer1 = lod.count(d => d == 2 || d == 4 || d == 3 || d == 7)
 
     val duration = (System.nanoTime - t1) / 1e9d
     println(s"Done: Part 1 run time (by the clock): $duration sec")
 
-    println(s"Day 8 Part 1 the number of times do digits 1, 4, 7, or 8 appear is: TBD")
+    println(s"Day 8 Part 1 the number of times do digits 1, 4, 7, or 8 appear is: $answer1")
 
 }
