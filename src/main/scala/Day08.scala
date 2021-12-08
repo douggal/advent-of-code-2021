@@ -35,15 +35,18 @@ object Day08 extends App {
 //    }
 
     println("------------------------------------")
-    println(s"Timestamp ${java.time.ZonedDateTime.now()}")
+    println("Data Quality Control:")
+    println(s"Input file name: ${filename}")
     println(s"Each line is a: ${input.getClass}")
     println(s"Number lines: ${input.length}")
+    println(s"Number items per line: ${input.head.sp.length}, ${input.head.fdo.length}")
     println(s"Input first line: ${input.head}")
     println(s"Input last line: ${input.tail.last}")
     println("------------------------------------")
 
 
     // Part 1
+    println(s"Start Timestamp ${java.time.ZonedDateTime.now()}")
     val t1 = System.nanoTime
 
     val digitMap = scala.collection.immutable.HashMap[Int,String](
