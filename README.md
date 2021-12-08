@@ -16,6 +16,8 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 5. Day  5: Hydrothermal Venture
 6. Day  6: Lanternfish
 7. Day  7: The Treachery of Whales
+8. Day  8: Seven Segment Search
+9. 
 
 ### Notes
 #### Day 01
