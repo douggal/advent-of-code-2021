@@ -24,7 +24,7 @@ object Day07 extends App {
             // char <- line
             yield
                 // work with each 'line' as a String here
-                line.strip.replace(" -> ",",")
+                line.strip
             ucLines.toVector
         }
     // read the input file and with a check for success or failure
@@ -91,12 +91,12 @@ object Day07 extends App {
 
     // https://stackoverflow.com/questions/37884493/scala-get-values-from-somevalue
     val position2: Int = ds2.find(p => p._2 == answer2).map(p => p._1) match {
-        case None => -9999 //Or handle the lack of a value another way: throw an error, etc.
+        case None => Int.MinValue //Or handle the lack of a value another way: throw an error, etc.
         case Some(i: Int) => i //return the string to set your value
     }
 
     val duration2 = (System.nanoTime - t2) / 1e9d
     println(s"Done: Part 2 run time (by the clock): $duration2 sec")
 
-    println(s"Day 7 Part 2 the minimum fuel use is: ${answer2} at position $position2")
+    println(s"Day 7 Part 2 the minimum fuel use is: $answer2 at position $position2")
 }
