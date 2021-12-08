@@ -20,7 +20,7 @@ object Day08 extends App {
     val readInputData = () => {
         val source = io.Source.fromFile(filename)
         for {
-            line <- source.getLines().drop(1).toVector
+            line <- source.getLines().toVector
             cols = line.strip.replace("|","").split("\\s+").map(_.trim)   // split on either space or | ???
         } yield
             inputLine(Vector[String](cols(0),cols(1),cols(2),cols(3),cols(4),cols(5),
@@ -47,7 +47,7 @@ object Day08 extends App {
 
     // In the output values, how many times do digits 1, 4, 7, or 8 appear?
     // lod = length of each output digit string
-    val lod = input.flatMap(l => l.fdo.map(i => i.length))
+    val lod = input.flatMap(l => l.fdo.map(s => s.length))
     println(lod)
 
     val answer1 = lod.count(d => d == 2 || d == 4 || d == 3 || d == 7)
