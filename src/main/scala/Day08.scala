@@ -13,6 +13,7 @@ object Day08 extends App {
 
     // make a note of all ten unique signal patterns you see,
     // and then write down a single four digit output value (your puzzle input)
+
     // Each entry consists of
     //  sp = ten unique signal patterns, and
     //  fdo = the four digit output values observed on panel
@@ -30,7 +31,6 @@ object Day08 extends App {
     }
 
     val input = readInputData()
-
     //    for (line <- input) {
     //        println(line)
     //    }
@@ -75,10 +75,10 @@ object Day08 extends App {
     val duration1 = (System.nanoTime - t1) / 1e9d
     println(s"Done: Part 1 run time (by the clock): $duration1 sec")
 
-    println(s"Day 8 Part 1 the number of times do digits 1, 4, 7, or 8 appear is: $answer1")
-
+    println(s"Day 8 Part 1 the number of times the digits 1, 4, 7, or 8 appear is: $answer1")
 
     //Part 2:
+
     // find mappings between possible 7-segment representations given on the left (vector sp)
     // and the four digit output (fdo) the right
 
@@ -86,6 +86,7 @@ object Day08 extends App {
         str.split("").sorted.mkString("")
     }
 
+    // list of numbers read from displays
     val list = scala.collection.mutable.ListBuffer[Int]()
 
     for (line <- input) {
@@ -165,8 +166,6 @@ object Day08 extends App {
           + d2d(sortStringLetters(line.fdo(1)))*100
           + d2d(sortStringLetters(line.fdo(2)))*10
           + d2d(sortStringLetters(line.fdo(3)))
-
-        val z = 1
     }
 
     println(s"Day 8 Part 2 the sum of the display numbers is: ${list.sum}")
