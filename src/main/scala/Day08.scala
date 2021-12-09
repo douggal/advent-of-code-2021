@@ -37,6 +37,7 @@ object Day08 extends App {
 
     println("------------------------------------")
     println("Data Quality Control:")
+    println(s"Start Timestamp ${java.time.ZonedDateTime.now()}")
     println(s"Input file name: $filename")
     println(s"Each line is a: ${input.getClass}")
     println(s"Number lines: ${input.length}")
@@ -47,8 +48,6 @@ object Day08 extends App {
 
 
     // Part 1
-    println(s"Start Timestamp ${java.time.ZonedDateTime.now()}")
-    val t1 = System.nanoTime
 
     val digitMap = scala.collection.immutable.HashMap[Int, String](
         0 -> "abcefg", 1 -> "cf", 2 -> "acdeg", 3 -> "acdfg", 4 -> "bcdf",
@@ -71,9 +70,6 @@ object Day08 extends App {
     // answer is count of numbers in lod which have match in the set of string lengths
     // of the 7-segment displays of the unique digits
     val answer1 = lod.count(d => lsu.contains(d))
-
-    val duration1 = (System.nanoTime - t1) / 1e9d
-    println(s"Done: Part 1 run time (by the clock): $duration1 sec")
 
     println(s"Day 8 Part 1 the number of times the digits 1, 4, 7, or 8 appear is: $answer1")
 
