@@ -17,7 +17,8 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 6. Day  6: Lanternfish
 7. Day  7: The Treachery of Whales
 8. Day  8: Seven Segment Search
-9. 
+9. Day  9: Smoke Basin
+10. 
 
 ### Notes
 #### Day 01
