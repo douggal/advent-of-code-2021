@@ -8,14 +8,14 @@ object Day08 extends App {
     println(s"--- Day 8: Seven Segment Search ---")
 
     // Puzzle Input Data File
-    //val filename = "Day08Input.txt"
-    val filename = "testInput.txt"
+    val filename = "Day08Input.txt"
+    //val filename = "testInput.txt"
 
     // make a note of all ten unique signal patterns you see,
     // and then write down a single four digit output value (your puzzle input)
     // Each entry consists of
     //  sp = ten unique signal patterns, and
-    //  fdo = the four digit output value
+    //  fdo = the four digit output values observed on panel
     case class inputLine(sp: Vector[String], fdo: Vector[String])
 
     val readInputData = () => {
