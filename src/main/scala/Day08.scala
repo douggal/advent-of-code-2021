@@ -105,39 +105,43 @@ object Day08 extends App {
             val two = s.toSet
             if (two.intersect(four).count(_ => true) == 2
               && two.intersect(seven).count(_ => true) == 2
-              && two.intersect(one).count(_ => true) == 1) true else false
+              && two.intersect(one).count(_ => true) == 1
+              && two.intersect(eight).count(_ => true) == 5) true else false
         }
         def test3(s: String): Boolean = {
             val three = s.toSet
-            if (three.intersect(four).count(_ => true) == 2
+            if (three.intersect(four).count(_ => true) == 3
               && three.intersect(seven).count(_ => true) == 3
-              && three.intersect(one).count(_ => true) == 2) true else false
+              && three.intersect(one).count(_ => true) == 2
+              && three.intersect(eight).count(_ => true) == 5) true else false
         }
         def test5(s: String): Boolean = {
             val five = s.toSet
             if (five.intersect(four).count(_ => true) == 3
-              && five.intersect(seven).count(_ => true) == 1
-              && five.intersect(one).count(_ => true) == 1) true else false
+              && five.intersect(seven).count(_ => true) == 2
+              && five.intersect(one).count(_ => true) == 1
+              && five.intersect(eight).count(_ => true) == 5) true else false
         }
         def test6(s: String): Boolean = {
             val six = s.toSet
             if (six.intersect(four).count(_ => true) == 3
               && six.intersect(seven).count(_ => true) == 2
-              && six.intersect(one).count(_ => true) == 1) true else false
+              && six.intersect(one).count(_ => true) == 1
+              && six.intersect(eight).count(_ => true) == 6) true else false
         }
-        def test0(s: String, three:Set[Char]): Boolean = {
+        def test0(s: String): Boolean = {
             val zero = s.toSet
-            if (zero.intersect(four).count(_ => true) == 4
+            if (zero.intersect(four).count(_ => true) == 3
               && zero.intersect(seven).count(_ => true) == 3
               && zero.intersect(one).count(_ => true) == 2
-              && zero.intersect(three).count(_ => true) == 4) true else false
+              && zero.intersect(eight).count(_ => true) == 6) true else false
         }
-        def test9(s: String, three:Set[Char]): Boolean = {
+        def test9(s: String): Boolean = {
             val nine = s.toSet
             if (nine.intersect(four).count(_ => true) == 4
               && nine.intersect(seven).count(_ => true) == 3
               && nine.intersect(one).count(_ => true) == 2
-              && nine.intersect(three).count(_ => true) == 5) true else false
+              && nine.intersect(eight).count(_ => true) == 6) true else false
         }
 
         // strings from signal processor sorted in decreasing order by length
@@ -147,12 +151,9 @@ object Day08 extends App {
         for (sp <- spSorted) {
             val s = sp.toSet
             if (!s.equals(one) && !s.equals(four) && !s.equals(seven) & !s.equals(eight) ) {
-                if (test3(sp)) {
-                    d2d += (sortStringLetters(sp)) -> 3
-                    three = sp.toSet
-                }
-                if (test9(sp,three)) d2d += (sortStringLetters(sp)) -> 9
-                else if (test0(sp,three)) d2d += (sortStringLetters(sp)) -> 0
+                if (test3(sp)) d2d += (sortStringLetters(sp)) -> 3
+                else if (test9(sp)) d2d += (sortStringLetters(sp)) -> 9
+                else if (test0(sp)) d2d += (sortStringLetters(sp)) -> 0
                 else if (test6(sp)) d2d += (sortStringLetters(sp)) -> 6
                 else if (test5(sp)) d2d += (sortStringLetters(sp)) -> 5
                 else if (test3(sp)) d2d += (sortStringLetters(sp)) -> 3
@@ -171,4 +172,5 @@ object Day08 extends App {
     println(s"Day 8 Part 2 the sum of the display numbers is: ${list.sum}")
 
     println(s"End at ${java.time.ZonedDateTime.now()}")
+
 }
