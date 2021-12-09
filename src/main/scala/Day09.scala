@@ -1,3 +1,5 @@
+import scala.collection.mutable.ArrayBuffer
+
 object Day09 extends App {
 
     // created 12/09/2021
@@ -46,7 +48,22 @@ object Day09 extends App {
 
     // The risk level of a low point is 1 plus its height
 
-    println(s"Day 9 Part 1 answer: TBD")
+    // Use an array.   is there a better way to process the input?
+    val lows = ArrayBuffer[Vector[Int]]()
+    val maxcol = input.head.heightmap.length-1
+    for (row <- input.indices;
+         col <- input.head.heightmap.indices) {
+        val top = if (row-1 >= 0) input(row-1).heightmap(col) else Int.MaxValue
+        val bottom = if (row+1 < input.length) input(row+1).heightmap(col) else Int.MaxValue
+        val left = if (col-1 >= 0) input(row).heightmap(col-1) else Int.MaxValue
+        val right = if (col+1 <= maxcol) input(row).heightmap(col+1) else Int.MaxValue
+        val test = input(row).heightmap(col) < Vector[Int](top, bottom, left, right).min
+        if (test) lows += Vector[Int](row, col, input(row).heightmap(col))
+    }
+    val risk = for (l<-lows) yield l(2)+1
+    val answer = risk.sum
+
+    println(s"Day 9 Part 1 sum of the risk levels at all the low points is: $answer")
 
 
 
