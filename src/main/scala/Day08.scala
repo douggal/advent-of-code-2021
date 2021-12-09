@@ -83,7 +83,7 @@ object Day08 extends App {
     // and the four digit output (fdo) the right
 
     def sortStringLetters(str:String):String = {
-        str.split("").sorted.mkString("")  //chars.sorted.mkString //.sort.join
+        str.split("").sorted.mkString("")
     }
 
     val list = scala.collection.mutable.ListBuffer[Int]()
@@ -92,10 +92,10 @@ object Day08 extends App {
         // start filling the mapping of displayed segments for each digit to real number
         var d2d = HashMap[String,Int]()
         // need set of characters that make up each unique digits 7-segment display
-        val one = line.sp.find(_.length == 2).head.toSet
-        val four = line.sp.find(_.length == 4).head.toSet
-        val seven = line.sp.find(_.length == 3).head.toSet
-        val eight = line.sp.find(_.length == 7).head.toSet
+        val one = line.sp.filter(_.length == 2).head.toSet
+        val four = line.sp.filter(_.length == 4).head.toSet
+        val seven = line.sp.filter(_.length == 3).head.toSet
+        val eight = line.sp.filter(_.length == 7).head.toSet
         d2d += (sortStringLetters(line.sp.find(_.length == 2).head)) -> 1
         d2d += (sortStringLetters(line.sp.find(_.length == 4).head)) -> 4
         d2d += (sortStringLetters(line.sp.find(_.length == 3).head)) -> 7
