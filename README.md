@@ -16,6 +16,8 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 5. Day  5: Hydrothermal Venture
 6. Day  6: Lanternfish
 7. Day  7: The Treachery of Whales
+8. Day  8: Seven Segment Search
+9. 
 
 ### Notes
 #### Day 01
@@ -46,7 +48,10 @@ Rather slow.  Run time (by the clock) was 237 secs with 200 of the 500 data poin
 Part 1:  success modeled the fish as an ArrayBuffer
 Part 2:
 a. try 0 failed:  numbers get too big after 100 generations, part 1 method won't work
-b. try 1 failed: try divide an conquer - create two threads and run have the fish simulation on one and rest on the other
+b. try 1 failed: try divide and conquer - create two threads and run have the fish simulation on one and rest on the other
 c. try 2 success:  aggregate the fish by age in a HashMap with values the count of how many at that age.
 
 #### Day 07
+I had a hard time understanding the problem, and when I finally did
+get it, I lost time by not first drawing out the 7-segment characters on paper
+with a Sharpie to find what distinquishes them.
