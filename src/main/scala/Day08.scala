@@ -37,7 +37,7 @@ object Day08 extends App {
 
     println("------------------------------------")
     println("Data Quality Control:")
-    println(s"Input file name: ${filename}")
+    println(s"Input file name: $filename")
     println(s"Each line is a: ${input.getClass}")
     println(s"Number lines: ${input.length}")
     println(s"Number items per line: ${input.head.sp.length}, ${input.head.fdo.length}")
@@ -90,16 +90,16 @@ object Day08 extends App {
 
     for (line <- input) {
         // start filling the mapping of displayed segments for each digit to real number
-        var d2d = HashMap[String,Int]()
+        val d2d = scala.collection.mutable.HashMap[String, Int]()
         // need set of characters that make up each unique digits 7-segment display
         val one = line.sp.filter(_.length == 2).head.toSet
         val four = line.sp.filter(_.length == 4).head.toSet
         val seven = line.sp.filter(_.length == 3).head.toSet
         val eight = line.sp.filter(_.length == 7).head.toSet
-        d2d += (sortStringLetters(line.sp.find(_.length == 2).head)) -> 1
-        d2d += (sortStringLetters(line.sp.find(_.length == 4).head)) -> 4
-        d2d += (sortStringLetters(line.sp.find(_.length == 3).head)) -> 7
-        d2d += (sortStringLetters(line.sp.find(_.length == 7).head)) -> 8
+        d2d += sortStringLetters(line.sp.find(_.length == 2).head) -> 1
+        d2d += sortStringLetters(line.sp.find(_.length == 4).head) -> 4
+        d2d += sortStringLetters(line.sp.find(_.length == 3).head) -> 7
+        d2d += sortStringLetters(line.sp.find(_.length == 7).head) -> 8
 
         def test2(s: String): Boolean = {
             val two = s.toSet
@@ -151,13 +151,13 @@ object Day08 extends App {
         for (sp <- spSorted) {
             val s = sp.toSet
             if (!s.equals(one) && !s.equals(four) && !s.equals(seven) & !s.equals(eight) ) {
-                if (test3(sp)) d2d += (sortStringLetters(sp)) -> 3
-                else if (test9(sp)) d2d += (sortStringLetters(sp)) -> 9
-                else if (test0(sp)) d2d += (sortStringLetters(sp)) -> 0
-                else if (test6(sp)) d2d += (sortStringLetters(sp)) -> 6
-                else if (test5(sp)) d2d += (sortStringLetters(sp)) -> 5
-                else if (test3(sp)) d2d += (sortStringLetters(sp)) -> 3
-                else if (test2(sp)) d2d += (sortStringLetters(sp)) -> 2
+                if (test3(sp)) d2d += sortStringLetters(sp) -> 3
+                else if (test9(sp)) d2d += sortStringLetters(sp) -> 9
+                else if (test0(sp)) d2d += sortStringLetters(sp) -> 0
+                else if (test6(sp)) d2d += sortStringLetters(sp) -> 6
+                else if (test5(sp)) d2d += sortStringLetters(sp) -> 5
+                else if (test3(sp)) d2d += sortStringLetters(sp) -> 3
+                else if (test2(sp)) d2d += sortStringLetters(sp) -> 2
             }
         }
 
