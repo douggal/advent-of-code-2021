@@ -82,63 +82,93 @@ object Day08 extends App {
     // find mappings between possible 7-segment representations given on the left (vector sp)
     // and the four digit output (fdo) the right
 
+    def sortStringLetters(str:String):String = {
+        str.split("").sorted.mkString("")  //chars.sorted.mkString //.sort.join
+    }
+
+    val list = scala.collection.mutable.ListBuffer[Int]()
+
     for (line <- input) {
         // start filling the mapping of displayed segments for each digit to real number
-        var d2d = HashMap[Int, Set[String]]()
+        var d2d = HashMap[String,Int]()
         // need set of characters that make up each unique digits 7-segment display
-        val one = Set(for (c <- line.sp.find(_.length == 2).head) yield c)
-        val four = Set(for (c <- line.sp.find(_.length == 4).head) yield c)
-        val seven = Set(for (c <- line.sp.find(_.length == 3).head) yield c)
-        val eight = Set(for (c <- line.sp.find(_.length == 7).head) yield c)
-        d2d(1) = one
-        d2d(4) = four
-        d2d(7) = seven
-        d2d(8) = eight
+        val one = line.sp.find(_.length == 2).head.toSet
+        val four = line.sp.find(_.length == 4).head.toSet
+        val seven = line.sp.find(_.length == 3).head.toSet
+        val eight = line.sp.find(_.length == 7).head.toSet
+        d2d += (sortStringLetters(line.sp.find(_.length == 2).head)) -> 1
+        d2d += (sortStringLetters(line.sp.find(_.length == 4).head)) -> 4
+        d2d += (sortStringLetters(line.sp.find(_.length == 3).head)) -> 7
+        d2d += (sortStringLetters(line.sp.find(_.length == 7).head)) -> 8
 
         def test2(s: String): Boolean = {
-            val two = Set(for (c <- s) yield c)
+            val two = s.toSet
             if (two.intersect(four).count(_ => true) == 2
               && two.intersect(seven).count(_ => true) == 2
               && two.intersect(one).count(_ => true) == 1) true else false
         }
         def test3(s: String): Boolean = {
-            val three = Set(for (c <- s) yield c)
+            val three = s.toSet
             if (three.intersect(four).count(_ => true) == 2
               && three.intersect(seven).count(_ => true) == 3
               && three.intersect(one).count(_ => true) == 2) true else false
         }
         def test5(s: String): Boolean = {
-            val five = Set(for (c <- s) yield c)
+            val five = s.toSet
             if (five.intersect(four).count(_ => true) == 3
               && five.intersect(seven).count(_ => true) == 1
               && five.intersect(one).count(_ => true) == 1) true else false
         }
         def test6(s: String): Boolean = {
-            val six = Set(for (c <- s) yield c)
+            val six = s.toSet
             if (six.intersect(four).count(_ => true) == 3
               && six.intersect(seven).count(_ => true) == 2
               && six.intersect(one).count(_ => true) == 1) true else false
         }
-
-        def test0(s: String, three:Set[String]): Boolean = {
-            val zero = Set(for (c <- s) yield c)
+        def test0(s: String, three:Set[Char]): Boolean = {
+            val zero = s.toSet
             if (zero.intersect(four).count(_ => true) == 4
               && zero.intersect(seven).count(_ => true) == 3
               && zero.intersect(one).count(_ => true) == 2
               && zero.intersect(three).count(_ => true) == 4) true else false
         }
-        def test9(s: String, three:Set[String]): Boolean = {
-            val nine = Set(for (c <- s) yield c)
+        def test9(s: String, three:Set[Char]): Boolean = {
+            val nine = s.toSet
             if (nine.intersect(four).count(_ => true) == 4
               && nine.intersect(seven).count(_ => true) == 3
               && nine.intersect(one).count(_ => true) == 2
               && nine.intersect(three).count(_ => true) == 5) true else false
         }
 
+        // strings from signal processor sorted in decreasing order by length
+        // https://stackoverflow.com/questions/60973686/how-to-deconstruct-sort-method-for-length-of-strings-descending-in-scala
+        val spSorted = line.sp.sortBy(word => -word.length)
+        var three = Set[Char]()
+        for (sp <- spSorted) {
+            val s = sp.toSet
+            if (!s.equals(one) && !s.equals(four) && !s.equals(seven) & !s.equals(eight) ) {
+                if (test3(sp)) {
+                    d2d += (sortStringLetters(sp)) -> 3
+                    three = sp.toSet
+                }
+                if (test9(sp,three)) d2d += (sortStringLetters(sp)) -> 9
+                else if (test0(sp,three)) d2d += (sortStringLetters(sp)) -> 0
+                else if (test6(sp)) d2d += (sortStringLetters(sp)) -> 6
+                else if (test5(sp)) d2d += (sortStringLetters(sp)) -> 5
+                else if (test3(sp)) d2d += (sortStringLetters(sp)) -> 3
+                else if (test2(sp)) d2d += (sortStringLetters(sp)) -> 2
+            }
+        }
+
+        list += d2d(sortStringLetters(line.fdo(0)))*1000
+          + d2d(sortStringLetters(line.fdo(1)))*100
+          + d2d(sortStringLetters(line.fdo(2)))*10
+          + d2d(sortStringLetters(line.fdo(3)))
+
         val z = 1
     }
 
-    println(s"Day 8 Part 2 the sum of the display numbers is: ")
+    println(s"Day 8 Part 2 the sum of the display numbers is: ${list.sum}")
 
     println(s"End at ${java.time.ZonedDateTime.now()}")
 }
