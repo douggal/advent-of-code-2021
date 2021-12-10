@@ -9,7 +9,7 @@ object Day09 extends App {
     println(s"--- Day 9: Smoke Basin ---")
 
     // Puzzle Input Data File
-    //val filename = "Day09Input.txt"
+    //val filename = "./input/Day09Input.txt"
     val filename = "./input/testInput.txt"
 
     //Each number corresponds to the height of a particular location,
@@ -96,27 +96,27 @@ object Day09 extends App {
         val hp = input(b.row).heightmap(b.col)
 
         // have we been here before or reached the limit 9?
-        if (hp == 9 || !v.contains(b) || b.row-1 < 0) v
+        if (hp == 9 || v.contains(b) || b.row-1 <= 0) v
         else walkUp(Point(b.row-1,b.col),  Point(b.row-1,b.col) :: v)
     }
     def walkRight(b: Point, v:List[Point]):List[Point] = {
         val hp = input(b.row).heightmap(b.col)
-        if (hp == 9 || !v.contains(b) || b.col+1 < input(b.row).heightmap.length) v
+        if (hp == 9 || v.contains(b) || b.col+1 >= input(b.row).heightmap.length) v
         else walkRight(Point(b.row,b.col+1),  Point(b.row,b.col+1) :: v)
     }
     def walkDown(b: Point, v:List[Point]):List[Point] = {
         val hp = input(b.row).heightmap(b.col)
-        if (hp == 9 || !v.contains(b) || b.row+1 < input.length) v
-        else walkDown(Point(b.row-1,b.col),  Point(b.row-1,b.col) :: v)
+        if (hp == 9 || v.contains(b) || b.row+1 >= input.length) v
+        else walkDown(Point(b.row+1,b.col),  Point(b.row+1,b.col) :: v)
     }
     def walkLeft(b: Point, v:List[Point]):List[Point] = {
         val hp = input(b.row).heightmap(b.col)
-        if (hp == 9 || !v.contains(b) || b.col-1 < 0) v
+        if (hp == 9 || v.contains(b) || b.col-1 <= 0) v
         else walkLeft(Point(b.row,b.col-1),  Point(b.row,b.col-1) :: v)
     }
 
     def walkBasin(p: Point):List[Point] = {
-        var b = ListBuffer[Point]()
+        var b = ListBuffer[Point](p)
         val up = walkUp(p, b.toList)
         val right = walkRight(p, b.toList)
         val down = walkDown(p, b.toList)
