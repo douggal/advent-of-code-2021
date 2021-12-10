@@ -140,7 +140,7 @@ object Day09 extends App {
         basins += walkBasin(Point(l(0),l(1)))
     }
 
-    val answer2 = basins.map(_.length).sorted.takeRight(3).sum
+    val answer2 = basins.sortBy(b => -b.length).take(3).map(_.length).product
 
 
     println(s"Day 9 Part 2 the product of the size of the three largest basins is: $answer2")
