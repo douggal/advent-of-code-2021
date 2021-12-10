@@ -9,8 +9,8 @@ object Day09 extends App {
     println(s"--- Day 9: Smoke Basin ---")
 
     // Puzzle Input Data File
-    val filename = "Day09Input.txt"
-    //val filename = "testInput.txt"
+    //val filename = "Day09Input.txt"
+    val filename = "testInput.txt"
 
     //Each number corresponds to the height of a particular location,
     // where 9 is the highest and 0 is the lowest a location can be
@@ -121,16 +121,15 @@ object Day09 extends App {
         val right = walkRight(p, b.toList)
         val down = walkDown(p, b.toList)
         val left = walkLeft(p, b.toList)
-        b ++= up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
-        var visited = up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)  //drop initial point
-
+        b ++= up ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
+        var visited =  up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1) //drop initial point
 
         while (visited.nonEmpty) {
-            b += visited.head
-            val up = walkUp(p, visited.tail)
-            val right = walkRight(p, visited.tail)
-            val down = walkDown(p, visited.tail)
-            val left = walkLeft(p, visited.tail)
+            val up = walkUp(visited.head, b.toList)
+            val right = walkRight(visited.head, b.toList)
+            val down = walkDown(visited.head, b.toList)
+            val left = walkLeft(visited.head, b.toList)
+            b ++= up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
             visited = up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
         }
 
