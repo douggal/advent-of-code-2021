@@ -10,7 +10,7 @@ object Day09 extends App {
 
     // Puzzle Input Data File
     //val filename = "Day09Input.txt"
-    val filename = "testInput.txt"
+    val filename = "./input/testInput.txt"
 
     //Each number corresponds to the height of a particular location,
     // where 9 is the highest and 0 is the lowest a location can be

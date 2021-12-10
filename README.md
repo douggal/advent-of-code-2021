@@ -56,3 +56,7 @@ c. try 2 success:  aggregate the fish by age in a HashMap with values the count 
 I had a hard time understanding the problem, and when I finally did
 get it, I lost time by not first drawing out the 7-segment characters on paper
 with a Sharpie to find what distinquishes them.
+
+#### Day 09
+Got part 1 but no cigar on part 2.  Moved data files to new folder.
+
