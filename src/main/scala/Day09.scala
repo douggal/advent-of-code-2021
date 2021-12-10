@@ -1,3 +1,4 @@
+import scala.collection.mutable.ListBuffer
 import scala.collection.mutable.ArrayBuffer
 
 object Day09 extends App {
@@ -48,7 +49,7 @@ object Day09 extends App {
 
     // The risk level of a low point is 1 plus its height
 
-    // Use an array.   is there a better way to process the input?
+    // lows is the list of low points stored as array of Int row, col, and height
     val lows = ArrayBuffer[Vector[Int]]()
     val maxcol = input.head.heightmap.length-1
     for (row <- input.indices;
@@ -66,10 +67,80 @@ object Day09 extends App {
     println(s"Day 9 Part 1 sum of the risk levels at all the low points is: $answer")
 
 
-
     // Part 2
 
-    println(s"Day 9 Part 2 the sum of the display numbers is: TDB")
+    /*
+    Next, you need to find the largest basins so you know what areas are most important to avoid.
+
+    A basin is all locations that eventually flow downward to a single low point.
+        every low point has a basin, although some basins are very small.
+        Locations of height 9 do not count as being in any basin,
+        and all other locations will always be part of exactly one basin.
+
+    The size of a basin is the number of locations within the basin, including the low point.
+    */
+
+    /* Find the three largest basins and multiply their sizes together. */
+
+    // from Scala docs:  By default, instances of case classes are immutable, and they are
+    // compared by value (unlike classes, whose instances are compared by reference).
+    case class Point(row: Int, col: Int)
+    val lowPoints = for (row <- lows) yield Point(row(0),row(1))  // don't need height here and want to use case class
+    val basins = ListBuffer[List[Point]]()
+
+    // given a basin, walk the heightmap until can't go any further.  return is the size of the basin
+    def walkUp(b: Point, v:List[Point]):List[Point] = {
+        // walk as far up, if not == 9 and pt not already visited
+
+        // hp = height (the value) at this point(row, col)
+        val hp = input(b.row).heightmap(b.col)
+
+        // have we been here before or reached the limit 9?
+        if (hp == 9 || !v.contains(b) || b.row-1 < 0) v
+        else walkUp(Point(b.row-1,b.col),  Point(b.row-1,b.col) :: v)
+    }
+    def walkRight(b: Point, v:List[Point]):List[Point] = {
+        val hp = input(b.row).heightmap(b.col)
+        if (hp == 9 || !v.contains(b) || b.col+1 < input(b.row).heightmap.length) v
+        else walkRight(Point(b.row,b.col+1),  Point(b.row,b.col+1) :: v)
+    }
+    def walkDown(b: Point, v:List[Point]):List[Point] = {
+        val hp = input(b.row).heightmap(b.col)
+        if (hp == 9 || !v.contains(b) || b.row+1 < input.length) v
+        else walkDown(Point(b.row-1,b.col),  Point(b.row-1,b.col) :: v)
+    }
+    def walkLeft(b: Point, v:List[Point]):List[Point] = {
+        val hp = input(b.row).heightmap(b.col)
+        if (hp == 9 || !v.contains(b) || b.col-1 < 0) v
+        else walkLeft(Point(b.row,b.col-1),  Point(b.row,b.col-1) :: v)
+    }
+
+    def walkBasin(p: Point):List[Point] = {
+        var b = ListBuffer[Point](p)
+        val up = walkUp(p, b.toList)
+        val right = walkRight(p, b.toList)
+        val down = walkDown(p, b.toList)
+        val left = walkLeft(p, b.toList)
+
+        var visited = (up ::: right ::: down ::: left).drop(1)  //drop initial point
+
+        while (visited.nonEmpty) {
+            val up = walkUp(p, visited)
+            val right = walkRight(p, visited)
+            val down = walkDown(p, visited)
+            val left = walkLeft(p, visited)
+            visited = (up ::: right ::: down ::: left).drop(1)
+        }
+
+        b.toList
+    }
+
+    for (l <- lows) {
+        basins += walkBasin(Point(l(0),l(1)))
+    }
+
+
+    println(s"Day 9 Part 2 the product of the size of the three largest basins is: TDB")
 
     println(s"End at ${java.time.ZonedDateTime.now()}")
 
