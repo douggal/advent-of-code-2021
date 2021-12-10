@@ -116,20 +116,22 @@ object Day09 extends App {
     }
 
     def walkBasin(p: Point):List[Point] = {
-        var b = ListBuffer[Point](p)
+        var b = ListBuffer[Point]()
         val up = walkUp(p, b.toList)
         val right = walkRight(p, b.toList)
         val down = walkDown(p, b.toList)
         val left = walkLeft(p, b.toList)
+        b ++= up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
+        var visited = up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)  //drop initial point
 
-        var visited = (up ::: right ::: down ::: left).drop(1)  //drop initial point
 
         while (visited.nonEmpty) {
-            val up = walkUp(p, visited)
-            val right = walkRight(p, visited)
-            val down = walkDown(p, visited)
-            val left = walkLeft(p, visited)
-            visited = (up ::: right ::: down ::: left).drop(1)
+            b += visited.head
+            val up = walkUp(p, visited.tail)
+            val right = walkRight(p, visited.tail)
+            val down = walkDown(p, visited.tail)
+            val left = walkLeft(p, visited.tail)
+            visited = up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
         }
 
         b.toList
@@ -139,8 +141,10 @@ object Day09 extends App {
         basins += walkBasin(Point(l(0),l(1)))
     }
 
+    val answer2 = basins.map(_.length).sorted.takeRight(3).sum
 
-    println(s"Day 9 Part 2 the product of the size of the three largest basins is: TDB")
+
+    println(s"Day 9 Part 2 the product of the size of the three largest basins is: $answer2")
 
     println(s"End at ${java.time.ZonedDateTime.now()}")
 
