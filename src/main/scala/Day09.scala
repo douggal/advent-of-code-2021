@@ -94,36 +94,38 @@ object Day09 extends App {
     // given a basin, walk the heightmap until can't go any further.  return is the size of the basin
     def walkUp(b: Point, v:mutable.Set[Point]):mutable.Set[Point] = {
         if (input(b.row).heightmap(b.col) == 9) v
-        else if (b.row < 0) v += b
-        else walkUp(Point(b.row-1,b.col),  v + b)
+        else if (b.row == 0) v += b
+        else walkUp(Point(b.row-1,b.col),  v += b)
     }
     def walkDown(b: Point, v: mutable.Set[Point]):mutable.Set[Point] = {
         if (input(b.row).heightmap(b.col) == 9) v
-        else if (b.row >= input.length) v += b
+        else if (b.row == input.length-1) v += b
         else walkDown(Point(b.row+1,b.col),  v += b)
     }
     def walkRight(b: Point, v:mutable.Set[Point]):mutable.Set[Point] = {
         if (input(b.row).heightmap(b.col) == 9) v
-        else if (b.col < input(b.row).heightmap.length) {
+        else {
             v.addAll(walkUp(b,v))
             v.addAll(walkDown(b,v))
         }
+
+        if (b.col+1 == input(b.row).heightmap.length) v
         else walkRight(Point(b.row, b.col + 1), v)
     }
     def walkLeft(b: Point, v:mutable.Set[Point]):mutable.Set[Point] = {
         if (input(b.row).heightmap(b.col) == 9) v
-        else if (b.col >= 0) {
+        else {
             v.addAll(walkUp(b,v))
             v.addAll(walkDown(b,v))
         }
+
+        if (b.col-1 < 0) v
         else walkLeft(Point(b.row,b.col-1),  v)
     }
 
     def walkBasin(p: Point):mutable.Set[Point] = {
         var b = mutable.Set[Point]()
-        val right = walkRight(p, b)
-        val left = walkLeft(p, b)
-        b
+        walkRight(p, b) ++= walkLeft(p, b)
     }
 
     for (l <- lows) {
