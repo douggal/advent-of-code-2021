@@ -1,3 +1,4 @@
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.collection.mutable.ArrayBuffer
 
@@ -9,7 +10,7 @@ object Day09 extends App {
     println(s"--- Day 9: Smoke Basin ---")
 
     // Puzzle Input Data File
-    //val filename = "Day09Input.txt"
+    //val filename = "./input/Day09Input.txt"
     val filename = "./input/testInput.txt"
 
     //Each number corresponds to the height of a particular location,
@@ -80,67 +81,75 @@ object Day09 extends App {
     The size of a basin is the number of locations within the basin, including the low point.
     */
 
+    import scala.collection.mutable.Set
+
     /* Find the three largest basins and multiply their sizes together. */
 
     // from Scala docs:  By default, instances of case classes are immutable, and they are
     // compared by value (unlike classes, whose instances are compared by reference).
     case class Point(row: Int, col: Int)
     val lowPoints = for (row <- lows) yield Point(row(0),row(1))  // don't need height here and want to use case class
-    val basins = ListBuffer[List[Point]]()
+    val basins = ListBuffer[mutable.Set[Point]]()
 
     // given a basin, walk the heightmap until can't go any further.  return is the size of the basin
-    def walkUp(b: Point, v:List[Point]):List[Point] = {
-        // walk as far up, if not == 9 and pt not already visited
-
-        // hp = height (the value) at this point(row, col)
-        val hp = input(b.row).heightmap(b.col)
-
-        // have we been here before or reached the limit 9?
-        if (hp == 9 || !v.contains(b) || b.row-1 < 0) v
-        else walkUp(Point(b.row-1,b.col),  Point(b.row-1,b.col) :: v)
-    }
-    def walkRight(b: Point, v:List[Point]):List[Point] = {
-        val hp = input(b.row).heightmap(b.col)
-        if (hp == 9 || !v.contains(b) || b.col+1 < input(b.row).heightmap.length) v
-        else walkRight(Point(b.row,b.col+1),  Point(b.row,b.col+1) :: v)
-    }
-    def walkDown(b: Point, v:List[Point]):List[Point] = {
-        val hp = input(b.row).heightmap(b.col)
-        if (hp == 9 || !v.contains(b) || b.row+1 < input.length) v
-        else walkDown(Point(b.row-1,b.col),  Point(b.row-1,b.col) :: v)
-    }
-    def walkLeft(b: Point, v:List[Point]):List[Point] = {
-        val hp = input(b.row).heightmap(b.col)
-        if (hp == 9 || !v.contains(b) || b.col-1 < 0) v
-        else walkLeft(Point(b.row,b.col-1),  Point(b.row,b.col-1) :: v)
+    def walkUp(b: Point, v:mutable.Set[Point]):mutable.Set[Point] = {
+        if (input(b.row).heightmap(b.col) == 9) v
+        else if (b.row-1 < 0) v += b
+        else {
+            //println(s"walkUP b= ${b.row},${b.col},  Next = ${b.row+1},${b.col}")
+            walkUp(Point(b.row-1,b.col),  v += b)
+        }
     }
 
-    def walkBasin(p: Point):List[Point] = {
-        var b = ListBuffer[Point]()
-        val up = walkUp(p, b.toList)
-        val right = walkRight(p, b.toList)
-        val down = walkDown(p, b.toList)
-        val left = walkLeft(p, b.toList)
-        b ++= up ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
-        var visited =  up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1) //drop initial point
-
-        while (visited.nonEmpty) {
-            val up = walkUp(visited.head, b.toList)
-            val right = walkRight(visited.head, b.toList)
-            val down = walkDown(visited.head, b.toList)
-            val left = walkLeft(visited.head, b.toList)
-            b ++= up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
-            visited = up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
+    def walkDown(b: Point, v: mutable.Set[Point]):mutable.Set[Point] = {
+        if (input(b.row).heightmap(b.col) == 9) v
+        else if (b.row+1 > input.length-1) v += b
+        else {
+            //println(s"walkDown b= ${b.row},${b.col},  Next = ${b.row+1},${b.col}")
+            walkDown(Point(b.row+1,b.col),  v += b)
+        }
+    }
+    def walkRight(b: Point, v:mutable.Set[Point]):mutable.Set[Point] = {
+        if (input(b.row).heightmap(b.col) != 9) {
+            v.addAll(walkUp(b,v))
+            println(s"walked right and Up: v= $v")
+            v.addAll(walkDown(b,v))
+            println(s"walked right and Down: v= $v")
         }
 
-        b.toList
+        if (b.col+1 > input(b.row).heightmap.length-1) v += b
+        else {
+            println(s"walking right next col: b = $b, v= ${b.row},${b.col}")
+            walkRight(Point(b.row, b.col + 1), v)
+        }
+    }
+    def walkLeft(b: Point, v:mutable.Set[Point]):mutable.Set[Point] = {
+        if (input(b.row).heightmap(b.col) != 9) {
+            v.addAll(walkUp(b,v))
+            println(s"walked left and Up: v= $v")
+            v.addAll(walkDown(b,v))
+            println(s"walked left and Up: v= $v")
+        }
+
+        if (b.col == 0) println(s"B equals 0 ${b.row},${b.col}")
+        if (b.col-1 < 0) v += b
+        else walkLeft(Point(b.row,b.col-1),  v)
     }
 
-    for (l <- lows) {
-        basins += walkBasin(Point(l(0),l(1)))
+    def walkBasin(p: Point):mutable.Set[Point] = {
+        var b = mutable.Set[Point]()
+        var c = walkRight(p, b) ++= walkLeft(p, b)
+        println(s"walked right and left: basin = $c")
+        c
     }
 
-    val answer2 = basins.map(_.length).sorted.takeRight(3).sum
+    println(s"$lows")
+    println(s"$lowPoints")
+    for (l <- lowPoints) {
+        basins += walkBasin(l)
+    }
+
+    val answer2 = basins.sortBy(b => b.size).take(3).map(_.size).product
 
 
     println(s"Day 9 Part 2 the product of the size of the three largest basins is: $answer2")
