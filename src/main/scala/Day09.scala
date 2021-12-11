@@ -96,41 +96,45 @@ object Day09 extends App {
         val hp = input(b.row).heightmap(b.col)
 
         // have we been here before or reached the limit 9?
-        if (hp == 9 || v.contains(b) || b.row-1 <= 0) v
-        else walkUp(Point(b.row-1,b.col),  Point(b.row-1,b.col) :: v)
+        if (hp == 9) v
+        else if (b.row-1 < 0) b :: v
+        else walkUp(Point(b.row-1,b.col),  b :: v)
     }
     def walkRight(b: Point, v:List[Point]):List[Point] = {
         val hp = input(b.row).heightmap(b.col)
-        if (hp == 9 || v.contains(b) || b.col+1 >= input(b.row).heightmap.length) v
-        else walkRight(Point(b.row,b.col+1),  Point(b.row,b.col+1) :: v)
+        if (hp == 9) v
+        else if (b.col+1 >= input(b.row).heightmap.length) b :: v
+        else walkRight(Point(b.row,b.col+1),  b :: v)
     }
     def walkDown(b: Point, v:List[Point]):List[Point] = {
         val hp = input(b.row).heightmap(b.col)
-        if (hp == 9 || v.contains(b) || b.row+1 >= input.length) v
-        else walkDown(Point(b.row+1,b.col),  Point(b.row+1,b.col) :: v)
+        if (hp == 9) v
+        else if (b.row+1 >= input.length) b :: v
+        else walkDown(Point(b.row+1,b.col),  b :: v)
     }
     def walkLeft(b: Point, v:List[Point]):List[Point] = {
         val hp = input(b.row).heightmap(b.col)
-        if (hp == 9 || v.contains(b) || b.col-1 <= 0) v
-        else walkLeft(Point(b.row,b.col-1),  Point(b.row,b.col-1) :: v)
+        if (hp == 9) v
+        else if (b.col-1 < 0) b :: v
+        else walkLeft(Point(b.row,b.col-1),  b :: v)
     }
 
     def walkBasin(p: Point):List[Point] = {
-        var b = ListBuffer[Point](p)
+        var b = ListBuffer[Point]()
         val up = walkUp(p, b.toList)
         val right = walkRight(p, b.toList)
         val down = walkDown(p, b.toList)
         val left = walkLeft(p, b.toList)
-        b ++= up ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
-        var visited =  up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1) //drop initial point
+        b ++= up ::: right.dropRight(1) ::: down.dropRight(1) ::: left.dropRight(1)
+        var visited =  up.dropRight(1) ::: right.dropRight(1) ::: down.dropRight(1) ::: left.dropRight(1) //drop initial point
 
         while (visited.nonEmpty) {
             val up = walkUp(visited.head, b.toList)
             val right = walkRight(visited.head, b.toList)
             val down = walkDown(visited.head, b.toList)
             val left = walkLeft(visited.head, b.toList)
-            b ++= up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
-            visited = up.drop(1) ::: right.drop(1) ::: down.drop(1) ::: left.drop(1)
+            b ++= up.dropRight(1) ::: right.dropRight(1) ::: down.dropRight(1) ::: left.dropRight(1)
+            visited =  up.dropRight(1) ::: right.dropRight(1) ::: down.dropRight(1) ::: left.dropRight(1) //drop initial point
         }
 
         b.toList
