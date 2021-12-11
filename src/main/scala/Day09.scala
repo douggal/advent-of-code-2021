@@ -115,10 +115,12 @@ object Day09 extends App {
             si.s match {
                 case "URDL" =>
                     // move up
-                    if (p.row-1 >= 0 && input(p.row-1).heightmap(p.col) != 9) {
-                        val newp = Point(p.row-1,p.col)
-                        s.push(StackItem(newp,"URDL"))
-                        b += newp
+                    if (si.p.row-1 >= 0 && input(p.row-1).heightmap(si.p.col) != 9) {
+                        val newp = Point(si.p.row-1,si.p.col)
+                        if (!b.contains(newp)) {
+                            s.push(StackItem(newp, "URDL"))
+                            b += newp
+                        }
                     } else {
                         // can't go up any further, remaining areas are R, D, and L
                         val oldp = s.pop()
@@ -126,10 +128,12 @@ object Day09 extends App {
                     }
                 case "RDL" =>
                     // move Right
-                    if (p.col+1 <= rowMax && input(p.row).heightmap(p.col+1) != 9) {
-                        val newp = Point(p.row,p.col+1)
-                        s.push(StackItem(newp,"URDL"))
-                        b += newp
+                    if (si.p.col+1 <= rowMax && input(si.p.row).heightmap(si.p.col+1) != 9) {
+                        val newp = Point(si.p.row,si.p.col+1)
+                        if (!b.contains(newp)) {
+                            s.push(StackItem(newp, "URDL"))
+                            b += newp
+                        }
                     } else {
                         // can't go right any further, remaining areas are D, and L
                         val oldp = s.pop()
@@ -137,10 +141,12 @@ object Day09 extends App {
                     }
                 case "DL" =>
                     // move down
-                    if (p.row+1 <= colMax && input(p.row+1).heightmap(p.col) != 9) {
+                    if (si.p.row+1 <= colMax && input(si.p.row+1).heightmap(si.p.col) != 9) {
                         val newp = Point(p.row+1,p.col)
-                        s.push(StackItem(newp,"URDL"))
-                        b += newp
+                        if (!b.contains(newp)) {
+                            s.push(StackItem(newp, "URDL"))
+                            b += newp
+                        }
                     } else {
                         // can't go down any further, remaining area is  are  L
                         val oldp = s.pop()
@@ -148,10 +154,12 @@ object Day09 extends App {
                     }
                 case "L" =>
                     // move Right
-                    if (p.col+1 <= rowMax && input(p.row).heightmap(p.col+1) != 9) {
+                    if (si.p.col+1 <= rowMax && input(si.p.row).heightmap(si.p.col+1) != 9) {
                         val newp = Point(p.row,p.col+1)
-                        s.push(StackItem(newp,"RDL"))
-                        b += newp
+                        if (!b.contains(newp)) {
+                            s.push(StackItem(newp, "RDL"))
+                            b += newp
+                        }
                     } else {
                         // can't go down any further stack item can be discarded
                         s.pop()
