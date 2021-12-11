@@ -59,4 +59,5 @@ with a Sharpie to find what distinquishes them.
 
 #### Day 09
 Got part 1 but no cigar on part 2.  Moved data files to new folder.
-
+- returned on 11th to puzzle and completed Part Two.  Sometimes there no better way than paper and markers
+to solve a problem.  [Computerphile](https://www.youtube.com/user/Computerphile).
