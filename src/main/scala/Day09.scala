@@ -1,6 +1,8 @@
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.Stack
+import scala.collection.mutable.Set
 
 object Day09 extends App {
 
@@ -81,70 +83,81 @@ object Day09 extends App {
     The size of a basin is the number of locations within the basin, including the low point.
     */
 
-    import scala.collection.mutable.Set
 
     /* Find the three largest basins and multiply their sizes together. */
 
     // from Scala docs:  By default, instances of case classes are immutable, and they are
     // compared by value (unlike classes, whose instances are compared by reference).
     case class Point(row: Int, col: Int)
-    val lowPoints = for (row <- lows) yield Point(row(0),row(1))  // don't need height here and want to use case class
+    case class StackItem(p:Point, s:String)
+
+    // don't need height saved earlier with low points and want to use case class for each basin point
+    val lowPoints = for (row <- lows) yield Point(row(0),row(1))
     val basins = ListBuffer[mutable.Set[Point]]()
 
-    // given a basin, walk the heightmap until can't go any further.  return is the size of the basin
-    def walkUp(b: Point, v:mutable.Set[Point]):mutable.Set[Point] = {
-        if (input(b.row).heightmap(b.col) == 9) v
-        else if (b.row-1 < 0) v += b
-        else {
-            //println(s"walkUP b= ${b.row},${b.col},  Next = ${b.row+1},${b.col}")
-            walkUp(Point(b.row-1,b.col),  v += b)
-        }
-    }
-    def walkDown(b: Point, v: mutable.Set[Point]):mutable.Set[Point] = {
-        if (input(b.row).heightmap(b.col) == 9) v
-        else if (b.row+1 > input.length-1) v += b
-        else {
-            //println(s"walkDown b= ${b.row},${b.col},  Next = ${b.row+1},${b.col}")
-            walkDown(Point(b.row+1,b.col),  v += b)
-        }
-    }
-    def walkRight(b: Point, v:mutable.Set[Point]):Unit = {
-        if (input(b.row).heightmap(b.col) != 9) {
-            v.addAll(walkUp(b,v))
-            println(s"walked right and Up: v= $v")
-            v.addAll(walkDown(b,v))
-            println(s"walked right and Down: v= $v")
-        }
-
-        if (b.col+1 > input(b.row).heightmap.length-1) v += b
-        else {
-            println(s"walking right next col: b = $b, v= ${b.row},${b.col}")
-            walkRight(Point(b.row, b.col + 1), v)
-        }
-    }
-    def walkLeft(b: Point, v:mutable.Set[Point]): Unit = {
-        if (input(b.row).heightmap(b.col) != 9) {
-            v.addAll(walkUp(b,v))
-            println(s"walked left and Up: v= $v")
-            v.addAll(walkDown(b,v))
-            println(s"walked left and Up: v= $v")
-        }
-
-        if (b.col == 0) println(s"B equals 0 ${b.row},${b.col}")
-        if (b.col-1 < 0) v += b
-        else walkLeft(Point(b.row,b.col-1),  v)
-    }
-
     def walkBasin(p: Point):mutable.Set[Point] = {
-        var b = mutable.Set[Point]()
-        walkRight(p, b)
-        walkLeft(p, b)
-        val v = b.toList
-        for (p <- v) {
-            walkRight(p,b)
-            walkLeft(p,b)
+        // the basin, b
+        val b = mutable.Set[Point]()
+        // a stack to help walk thru all the points in basin
+        // at each point, next move is URDL, RDL, DL, L
+        val s = mutable.Stack[StackItem]()
+
+        // heightmap is a rectangular
+        val rowMax = input(p.row).heightmap.length - 1
+        val colMax = input.length - 1
+
+        // U = next move to try is up; and so on, R = right; D = down; L = left
+        s.push(StackItem(p,"URDL"))
+        b += p
+        while (!s.isEmpty) {
+            // pop a stack item and proceed
+            val si = s.top
+            si.s match {
+                case "URDL" =>
+                    // move up
+                    if (p.row-1 >= 0 && input(p.row-1).heightmap(p.col) != 9) {
+                        val newp = Point(p.row-1,p.col)
+                        s.push(StackItem(newp,"URDL"))
+                        b += newp
+                    } else {
+                        // can't go up any further, remaining areas are R, D, and L
+                        val oldp = s.pop()
+                        s.push(StackItem(oldp.p,"RDL"))
+                    }
+                case "RDL" =>
+                    // move Right
+                    if (p.col+1 <= rowMax && input(p.row).heightmap(p.col+1) != 9) {
+                        val newp = Point(p.row,p.col+1)
+                        s.push(StackItem(newp,"URDL"))
+                        b += newp
+                    } else {
+                        // can't go right any further, remaining areas are D, and L
+                        val oldp = s.pop()
+                        s.push(StackItem(oldp.p,"DL"))
+                    }
+                case "DL" =>
+                    // move down
+                    if (p.row+1 <= colMax && input(p.row+1).heightmap(p.col) != 9) {
+                        val newp = Point(p.row+1,p.col)
+                        s.push(StackItem(newp,"URDL"))
+                        b += newp
+                    } else {
+                        // can't go down any further, remaining area is  are  L
+                        val oldp = s.pop()
+                        s.push(StackItem(oldp.p,"L"))
+                    }
+                case "L" =>
+                    // move Right
+                    if (p.col+1 <= rowMax && input(p.row).heightmap(p.col+1) != 9) {
+                        val newp = Point(p.row,p.col+1)
+                        s.push(StackItem(newp,"RDL"))
+                        b += newp
+                    } else {
+                        // can't go down any further stack item can be discarded
+                        s.pop()
+                    }
+            }
         }
-        println(s"walked right and left: basin = $b")
         b
     }
 
