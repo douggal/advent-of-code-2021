@@ -100,6 +100,7 @@ object Day09 extends App {
             walkUp(Point(b.row-1,b.col),  v += b)
         }
     }
+
     def walkDown(b: Point, v: mutable.Set[Point]):mutable.Set[Point] = {
         if (input(b.row).heightmap(b.col) == 9) v
         else if (b.row+1 > input.length-1) v += b
