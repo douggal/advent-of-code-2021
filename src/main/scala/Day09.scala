@@ -100,7 +100,6 @@ object Day09 extends App {
             walkUp(Point(b.row-1,b.col),  v += b)
         }
     }
-
     def walkDown(b: Point, v: mutable.Set[Point]):mutable.Set[Point] = {
         if (input(b.row).heightmap(b.col) == 9) v
         else if (b.row+1 > input.length-1) v += b
@@ -109,7 +108,7 @@ object Day09 extends App {
             walkDown(Point(b.row+1,b.col),  v += b)
         }
     }
-    def walkRight(b: Point, v:mutable.Set[Point]):mutable.Set[Point] = {
+    def walkRight(b: Point, v:mutable.Set[Point]):Unit = {
         if (input(b.row).heightmap(b.col) != 9) {
             v.addAll(walkUp(b,v))
             println(s"walked right and Up: v= $v")
@@ -123,7 +122,7 @@ object Day09 extends App {
             walkRight(Point(b.row, b.col + 1), v)
         }
     }
-    def walkLeft(b: Point, v:mutable.Set[Point]):mutable.Set[Point] = {
+    def walkLeft(b: Point, v:mutable.Set[Point]): Unit = {
         if (input(b.row).heightmap(b.col) != 9) {
             v.addAll(walkUp(b,v))
             println(s"walked left and Up: v= $v")
@@ -138,16 +137,22 @@ object Day09 extends App {
 
     def walkBasin(p: Point):mutable.Set[Point] = {
         var b = mutable.Set[Point]()
-        var c = walkRight(p, b) ++= walkLeft(p, b)
-        println(s"walked right and left: basin = $c")
-        c
+        walkRight(p, b)
+        walkLeft(p, b)
+        val v = b.toList
+        for (p <- v) {
+            walkRight(p,b)
+            walkLeft(p,b)
+        }
+        println(s"walked right and left: basin = $b")
+        b
     }
 
-    println(s"$lows")
-    println(s"$lowPoints")
-    for (l <- lowPoints) {
-        basins += walkBasin(l)
-    }
+    println(walkBasin(lowPoints(3)))
+
+//    for (l <- lowPoints) {
+//        basins += walkBasin(l)
+//    }
 
     val answer2 = basins.sortBy(b => b.size).take(3).map(_.size).product
 
