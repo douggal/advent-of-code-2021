@@ -109,15 +109,15 @@ object Day09 extends App {
         // U = next move to try is up; and so on, R = right; D = down; L = left
         s.push(StackItem(p,"URDL"))
         b += p
-        while (!s.isEmpty) {
+        while (s.nonEmpty) {
             // pop a stack item and proceed
             val si = s.top
-            println(s"Stack top: $si}")
+            //println(s"Stack top: $si}")
             si.s match {
                 case "URDL" =>
                     // move up
                     val newp = Point(si.p.row-1,si.p.col)
-                    if (si.p.row-1 >= 0 && input(p.row-1).heightmap(si.p.col) != 9 && !b.contains(newp)) {
+                    if (si.p.row-1 >= 0 && input(si.p.row-1).heightmap(si.p.col) != 9 && !b.contains(newp)) {
                         s.push(StackItem(newp, "URDL"))
                         b += newp
                     } else {
@@ -162,17 +162,19 @@ object Day09 extends App {
         b
     }
 
-    println(walkBasin(lowPoints(3)))
+    //println(walkBasin(lowPoints(2)))
 
-//    for (l <- lowPoints) {
-//        basins += walkBasin(l)
-//    }
+    for (l <- lowPoints) {
+        basins += walkBasin(l)
+    }
 
-    val answer2 = basins.sortBy(b => b.size).take(3).map(_.size).product
+    val answer2 = basins.sortBy(b => -b.size).take(3).map(_.size).product
 
 
     println(s"Day 9 Part 2 the product of the size of the three largest basins is: $answer2")
 
     println(s"End at ${java.time.ZonedDateTime.now()}")
 
+
+    // 1256640  too low
 }
