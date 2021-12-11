@@ -103,8 +103,8 @@ object Day09 extends App {
         val s = mutable.Stack[StackItem]()
 
         // heightmap is a rectangular
-        val rowMax = input(p.row).heightmap.length - 1
-        val colMax = input.length - 1
+        val colMax = input(p.row).heightmap.length - 1
+        val rowMax = input.length - 1
 
         // U = next move to try is up; and so on, R = right; D = down; L = left
         s.push(StackItem(p,"URDL"))
@@ -112,15 +112,14 @@ object Day09 extends App {
         while (!s.isEmpty) {
             // pop a stack item and proceed
             val si = s.top
+            println(s"Stack top: $si}")
             si.s match {
                 case "URDL" =>
                     // move up
-                    if (si.p.row-1 >= 0 && input(p.row-1).heightmap(si.p.col) != 9) {
-                        val newp = Point(si.p.row-1,si.p.col)
-                        if (!b.contains(newp)) {
-                            s.push(StackItem(newp, "URDL"))
-                            b += newp
-                        }
+                    val newp = Point(si.p.row-1,si.p.col)
+                    if (si.p.row-1 >= 0 && input(p.row-1).heightmap(si.p.col) != 9 && !b.contains(newp)) {
+                        s.push(StackItem(newp, "URDL"))
+                        b += newp
                     } else {
                         // can't go up any further, remaining areas are R, D, and L
                         val oldp = s.pop()
@@ -128,12 +127,10 @@ object Day09 extends App {
                     }
                 case "RDL" =>
                     // move Right
-                    if (si.p.col+1 <= rowMax && input(si.p.row).heightmap(si.p.col+1) != 9) {
-                        val newp = Point(si.p.row,si.p.col+1)
-                        if (!b.contains(newp)) {
-                            s.push(StackItem(newp, "URDL"))
-                            b += newp
-                        }
+                    val newp = Point(si.p.row,si.p.col+1)
+                    if (si.p.col+1 <= colMax && input(si.p.row).heightmap(si.p.col+1) != 9 && !b.contains(newp)) {
+                        s.push(StackItem(newp, "URDL"))
+                        b += newp
                     } else {
                         // can't go right any further, remaining areas are D, and L
                         val oldp = s.pop()
@@ -141,27 +138,23 @@ object Day09 extends App {
                     }
                 case "DL" =>
                     // move down
-                    if (si.p.row+1 <= colMax && input(si.p.row+1).heightmap(si.p.col) != 9) {
-                        val newp = Point(p.row+1,p.col)
-                        if (!b.contains(newp)) {
-                            s.push(StackItem(newp, "URDL"))
-                            b += newp
-                        }
+                    val newp = Point(si.p.row+1,si.p.col)
+                    if (si.p.row+1 <= rowMax && input(si.p.row+1).heightmap(si.p.col) != 9 && !b.contains(newp)) {
+                        s.push(StackItem(newp, "URDL"))
+                        b += newp
                     } else {
                         // can't go down any further, remaining area is  are  L
                         val oldp = s.pop()
                         s.push(StackItem(oldp.p,"L"))
                     }
                 case "L" =>
-                    // move Right
-                    if (si.p.col+1 <= rowMax && input(si.p.row).heightmap(si.p.col+1) != 9) {
-                        val newp = Point(p.row,p.col+1)
-                        if (!b.contains(newp)) {
-                            s.push(StackItem(newp, "RDL"))
-                            b += newp
-                        }
+                    // move Left
+                    val newp = Point(si.p.row,si.p.col-1)
+                    if (si.p.col-1 >= 0 && input(si.p.row).heightmap(si.p.col-1) != 9 && !b.contains(newp)) {
+                        s.push(StackItem(newp, "RDL"))
+                        b += newp
                     } else {
-                        // can't go down any further stack item can be discarded
+                        // can't go any further stack item can be discarded
                         s.pop()
                     }
             }
