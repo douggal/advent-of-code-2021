@@ -12,8 +12,8 @@ object Day09 extends App {
     println(s"--- Day 9: Smoke Basin ---")
 
     // Puzzle Input Data File
-    //val filename = "./input/Day09Input.txt"
-    val filename = "./input/testInput.txt"
+    val filename = "./input/Day09Input.txt"
+    //val filename = "./input/testInput.txt"
 
     //Each number corresponds to the height of a particular location,
     // where 9 is the highest and 0 is the lowest a location can be
@@ -177,4 +177,5 @@ object Day09 extends App {
 
 
     // 1256640  too low
+    // 1280496
 }
