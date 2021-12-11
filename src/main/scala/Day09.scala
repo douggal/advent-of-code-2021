@@ -151,7 +151,7 @@ object Day09 extends App {
                     // move Left
                     val newp = Point(si.p.row,si.p.col-1)
                     if (si.p.col-1 >= 0 && input(si.p.row).heightmap(si.p.col-1) != 9 && !b.contains(newp)) {
-                        s.push(StackItem(newp, "RDL"))
+                        s.push(StackItem(newp, "URDL"))
                         b += newp
                     } else {
                         // can't go any further stack item can be discarded
