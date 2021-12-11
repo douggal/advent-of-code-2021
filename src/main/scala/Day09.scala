@@ -137,20 +137,16 @@ object Day09 extends App {
 
     def walkBasin(p: Point):mutable.Set[Point] = {
         var b = mutable.Set[Point]()
-        var c = (walkRight(p, b) ++= walkLeft(p, b)).toList
+        var c = walkRight(p, b) ++= walkLeft(p, b)
         println(s"walked right and left: basin = $c")
-        while (!c.isEmpty) {
-            walkRight(c, b) ++= walkLeft(c, b)
-            c = c.drop(1)
-        }
-        b
+        c
     }
 
     println(s"$lows")
     println(s"$lowPoints")
-    //for (l <- lowPoints) {
-        basins += walkBasin(lowPoints(2))
-   // }
+    for (l <- lowPoints) {
+        basins += walkBasin(l)
+    }
 
     val answer2 = basins.sortBy(b => b.size).take(3).map(_.size).product
 
