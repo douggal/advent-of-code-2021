@@ -1,5 +1,8 @@
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
+
 object Day10 extends App {
-    // created 12/11/2021
+    // created 12/13/2021
     // https://adventofcode.com/2021/day/10
 
     println(s"--- Day 10: Syntax Scoring ---")
@@ -37,6 +40,77 @@ object Day10 extends App {
 
 
     // Part 1
+
+    val points = scala.collection.immutable.HashMap[String,Int](
+    ")"-> 3, "]" ->  57,  "}"->1197, ">"-> 25137)
+
+    val openers = List("(","[","{","<")
+    val closers = List(")","]","}",">")
+
+    class AoCStackItem(val si:String) {
+        override def toString: String = {
+            s"AoC Stack Item $si"
+        }
+    }
+
+    class AocStack() {
+
+        var st = scala.collection.mutable.ListBuffer[AoCStackItem]()
+
+        def notEmpty(): Boolean = {
+            st.nonEmpty
+        }
+
+        def stackTop(): AoCStackItem = {
+            st.head
+        }
+
+        def push(si: AoCStackItem): Unit = {
+            st += si
+        }
+        def pop():AoCStackItem = {
+            val item = st.head
+            st = st.drop(1)
+            item
+        }
+        override def toString: String = {
+            s"AoC Stack has ${st.length} items"
+        }
+    }
+
+    val aocstak = new AocStack
+    val fic = mutable.HashMap[String, Int]()  // found illegal char and line number
+    val inc = ListBuffer[Int]()  // incomplete lines
+
+    for (il <- input) {
+        var i = 0
+        var found = false
+        while (!found && i<il.chunks.length) {
+            val c = il.chunks(i)
+            if (openers.contains(c)) {
+                val si = new AoCStackItem(c)
+                aocstak.push(si)
+            } else if (closers.contains(c)) {
+                if (openers.indexOf(aocstak.stackTop().si) == closers.indexOf(c)) {
+                    // have a match
+                    aocstak.pop()
+                } else {
+                    // have a mismatch
+                    fic += c -> i
+                    found = true
+                }
+            } else {
+                // have input item that is not an opener or closer
+                // TODO: are there any other chars?
+                println("ERROR")
+            }
+            i += 1
+        }
+        if (i == il.chunks.length && !found && aocstak.notEmpty()) {
+
+        }
+
+    }
 
     println(s"Day 10 Part 1 TBD")
 
