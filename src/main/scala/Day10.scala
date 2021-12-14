@@ -8,8 +8,8 @@ object Day10 extends App {
     println(s"--- Day 10: Syntax Scoring ---")
 
     // Puzzle Input Data File
-    //val filename = "./input/Day10Input.txt"
-    val filename = "./input/testInput.txt"
+    val filename = "./input/Day10Input.txt"
+    //val filename = "./input/testInput.txt"
 
     case class inputLine(chunks: Vector[String])
 
@@ -82,7 +82,7 @@ object Day10 extends App {
     val fic = ListBuffer[String]() //, Int]()  // found illegal char and line number
     val inc = ListBuffer[Int]()  // incomplete lines
 
-    for (il <- input) {
+    for ((il, index) <- input.zipWithIndex) {
         val aocstak = new AocStack
         var i = 0
         var found = false
@@ -92,7 +92,7 @@ object Day10 extends App {
                 val si = new AoCStackItem(c)
                 aocstak.push(si)
             } else if (closers.contains(c)) {
-                if (brackets(c) == aocstak.stackTop().si) {
+                if (aocstak.notEmpty() && brackets(c) == aocstak.stackTop().si) {
                     // have a match with an opener
                     aocstak.pop()
                 } else {
@@ -107,10 +107,8 @@ object Day10 extends App {
             }
             i += 1
         }
-        if (i == il.chunks.length && !found && aocstak.notEmpty()) {
-
-        }
-
+        // check for incomplete line
+        if (i == il.chunks.length && !found && aocstak.notEmpty()) inc += index
     }
 
     val answer = fic.map(v => points(v)).sum

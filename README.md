@@ -18,7 +18,8 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 7. Day  7: The Treachery of Whales
 8. Day  8: Seven Segment Search
 9. Day  9: Smoke Basin
-10. 
+10. Day 10: Syntax Scoring
+11. 
 
 ### Notes
 #### Day 01
@@ -61,3 +62,5 @@ with a Sharpie to find what distinquishes them.
 Got part 1 but no cigar on part 2.  Moved data files to new folder.
 - returned on 11th to puzzle and completed Part Two.  Sometimes there no better way than paper and markers
 to solve a problem.  [Computerphile](https://www.youtube.com/user/Computerphile).
+
+#### Day 10
