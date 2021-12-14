@@ -44,8 +44,9 @@ object Day10 extends App {
     val points = scala.collection.immutable.HashMap[String,Int](
     ")"-> 3, "]" ->  57,  "}"->1197, ">"-> 25137)
 
-    val openers = List("(","[","{","<")
-    val closers = List(")","]","}",">")
+    val brackets = scala.collection.immutable.HashMap[String, String](")" -> "(", "]"->"[","}"->"{",">"->"<")
+    val openers = brackets.values.toList
+    val closers = brackets.keys.toList
 
     class AoCStackItem(val si:String) {
         override def toString: String = {
@@ -66,7 +67,7 @@ object Day10 extends App {
         }
 
         def push(si: AoCStackItem): Unit = {
-            st += si
+            st.prepend(si)
         }
         def pop():AoCStackItem = {
             val item = st.head
@@ -78,11 +79,11 @@ object Day10 extends App {
         }
     }
 
-    val aocstak = new AocStack
-    val fic = mutable.HashMap[String, Int]()  // found illegal char and line number
+    val fic = ListBuffer[String]() //, Int]()  // found illegal char and line number
     val inc = ListBuffer[Int]()  // incomplete lines
 
     for (il <- input) {
+        val aocstak = new AocStack
         var i = 0
         var found = false
         while (!found && i<il.chunks.length) {
@@ -91,12 +92,12 @@ object Day10 extends App {
                 val si = new AoCStackItem(c)
                 aocstak.push(si)
             } else if (closers.contains(c)) {
-                if (openers.indexOf(aocstak.stackTop().si) == closers.indexOf(c)) {
-                    // have a match
+                if (brackets(c) == aocstak.stackTop().si) {
+                    // have a match with an opener
                     aocstak.pop()
                 } else {
                     // have a mismatch
-                    fic += c -> i
+                    fic += c //-> i
                     found = true
                 }
             } else {
@@ -112,12 +113,14 @@ object Day10 extends App {
 
     }
 
-    println(s"Day 10 Part 1 TBD")
+    val answer = fic.map(v => points(v)).sum
+
+    println(s"Day 10 Part 1 sum of values of scores for each illegal char found in input: $answer")
 
 
     // Part 2
 
-    println(s"Day 19 Part 2 tbd")
+    println(s"Day 10 Part 2 tbd")
 
     println(s"End at ${java.time.ZonedDateTime.now()}")
 
