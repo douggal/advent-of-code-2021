@@ -41,8 +41,7 @@ object Day10 extends App {
 
     // Part 1
 
-    val points = scala.collection.immutable.HashMap[String,Int](
-    ")"-> 3, "]" ->  57,  "}"->1197, ">"-> 25137)
+    val points = scala.collection.immutable.HashMap[String,Int](")"-> 3, "]" ->  57,  "}"->1197, ">"-> 25137)
 
     val brackets = scala.collection.immutable.HashMap[String, String](")" -> "(", "]"->"[","}"->"{",">"->"<")
     val openers = brackets.values.toList
@@ -54,7 +53,7 @@ object Day10 extends App {
         }
     }
 
-    class AocStack() {
+    class AoCStack() {
 
         var st = scala.collection.mutable.ListBuffer[AoCStackItem]()
 
@@ -79,11 +78,14 @@ object Day10 extends App {
         }
     }
 
-    val fic = ListBuffer[String]() //, Int]()  // found illegal char and line number
+    val fic = ListBuffer[String]() // found illegal char
+    val cor = ListBuffer[Int]()  // corrupted lines
     val inc = ListBuffer[Int]()  // incomplete lines
 
+    // Scala for loop with index:  two options
+    // Ref:  https://stackoverflow.com/questions/16883875/scala-for-loop-getting-index-in-consice-way
     for ((il, index) <- input.zipWithIndex) {
-        val aocstak = new AocStack
+        val aocstak = new AoCStack
         var i = 0
         var found = false
         while (!found && i<il.chunks.length) {
@@ -96,8 +98,9 @@ object Day10 extends App {
                     // have a match with an opener
                     aocstak.pop()
                 } else {
-                    // have a mismatch
-                    fic += c //-> i
+                    // have a mismatch = corrupted line
+                    fic += c
+                    cor += index
                     found = true
                 }
             } else {
@@ -107,16 +110,25 @@ object Day10 extends App {
             }
             i += 1
         }
-        // check for incomplete line
+        // check for incomplete line - maybe not necessary and has to be incomplete at this point
         if (i == il.chunks.length && !found && aocstak.notEmpty()) inc += index
     }
 
     val answer = fic.map(v => points(v)).sum
+    println(s"Quality control: sum of incomplete ${inc.length} + corrupted lines ${cor.length} should equal total lines.")
 
     println(s"Day 10 Part 1 sum of values of scores for each illegal char found in input: $answer")
-
+    println("")
 
     // Part 2
+
+    // get rid of corrupted lines
+    // https://stackoverflow.com/questions/18814522/scala-filter-on-a-list-by-index
+    val clean = input.zipWithIndex.collect { case (l,i) if (!cor.contains(i)) => l }
+
+    //figure out the sequence of closing characters that complete all open chunks in the line
+    // add them in correct order
+
 
     println(s"Day 10 Part 2 tbd")
 
