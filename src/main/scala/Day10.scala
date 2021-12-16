@@ -8,8 +8,8 @@ object Day10 extends App {
     println(s"--- Day 10: Syntax Scoring ---")
 
     // Puzzle Input Data File
-    //val filename = "./input/Day10Input.txt"
-    val filename = "./input/testInput.txt"
+    val filename = "./input/Day10Input.txt"
+    //val filename = "./input/testInput.txt"
 
     case class inputLine(chunks: Vector[String])
 
@@ -162,11 +162,11 @@ object Day10 extends App {
         lines += index
     }
 
-    val pointsPt2 = scala.collection.immutable.HashMap[String,Int](")"->1,"]"->2,"}"->3,">"->4)
+    val pointsPt2 = scala.collection.immutable.HashMap[String,BigInt](")"->1,"]"->2,"}"->3,">"->4)
 
     //Start with a total score of 0. Then, for each character, multiply the total score by 5 and then
     // increase the total score by the point value given for the character
-    val scores = (closeSeq.map { line => line.foldLeft(0){(a,b) => (5 * a) +pointsPt2(b)} }).toList
+    val scores = (closeSeq.map { line => line.foldLeft(BigInt(0)){(a,b) => (BigInt(5) * a) +pointsPt2(b)} }).toList
     // amswer the score that falls exactly in the middle.
     val answerP2 = scores.sorted.drop(scores.length/2).head
 
