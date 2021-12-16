@@ -64,3 +64,4 @@ Got part 1 but no cigar on part 2.  Moved data files to new folder.
 to solve a problem.  [Computerphile](https://www.youtube.com/user/Computerphile).
 
 #### Day 10
+BigInt needed in Part Two scoring.  Scala doesn't throw error on integer overflow?
