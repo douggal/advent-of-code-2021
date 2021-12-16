@@ -8,8 +8,8 @@ object Day10 extends App {
     println(s"--- Day 10: Syntax Scoring ---")
 
     // Puzzle Input Data File
-    val filename = "./input/Day10Input.txt"
-    //val filename = "./input/testInput.txt"
+    //val filename = "./input/Day10Input.txt"
+    val filename = "./input/testInput.txt"
 
     case class inputLine(chunks: Vector[String])
 
@@ -128,9 +128,49 @@ object Day10 extends App {
 
     //figure out the sequence of closing characters that complete all open chunks in the line
     // add them in correct order
+    val closeSeq = ListBuffer[List[String]]() // closing sequences
+    val lines = ListBuffer[Int]()  // line number of each closing seq
+    val bracketsMatch = scala.collection.immutable.HashMap[String, String]("(" -> ")", "["->"]","{"->"}","<"->">")
 
+    for ((il, index) <- clean.zipWithIndex) {
+        val aocstak = new AoCStack
 
-    println(s"Day 10 Part 2 tbd")
+        // keep track of what we need to add
+        var a = ListBuffer[String]()
+        // push and pop until
+
+        for (c <- il.chunks) {
+            if (openers.contains(c)) {
+                val si = new AoCStackItem(c)
+                aocstak.push(si)
+            } else if (closers.contains(c)) {
+                if (aocstak.notEmpty() && brackets(c) == aocstak.stackTop().si) {
+                    // have a match with an opener, discard it
+                    aocstak.pop()
+                }
+            }
+        }
+
+        while (aocstak.notEmpty()) {
+            val c = aocstak.pop() // item of type stack item
+            if (openers.contains(c.si)) {
+                // add closer bracket
+                a += bracketsMatch(c.si)
+            }
+        }
+        closeSeq += a.toList
+        lines += index
+    }
+
+    val pointsPt2 = scala.collection.immutable.HashMap[String,Int](")"->1,"]"->2,"}"->3,">"->4)
+
+    //Start with a total score of 0. Then, for each character, multiply the total score by 5 and then
+    // increase the total score by the point value given for the character
+    val scores = (closeSeq.map { line => line.foldLeft(0){(a,b) => (5 * a) +pointsPt2(b)} }).toList
+    // amswer the score that falls exactly in the middle.
+    val answerP2 = scores.sorted.drop(scores.length/2).head
+
+    println(s"Day 10 Part 2, the middle score is $answerP2")
 
     println(s"End at ${java.time.ZonedDateTime.now()}")
 
