@@ -19,7 +19,8 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 8. Day  8: Seven Segment Search
 9. Day  9: Smoke Basin
 10. Day 10: Syntax Scoring
-11. 
+11. Day 11: Dumbo Octopus
+12. 
 
 ### Notes
 #### Day 01
@@ -65,3 +66,5 @@ to solve a problem.  [Computerphile](https://www.youtube.com/user/Computerphile)
 
 #### Day 10
 BigInt needed in Part Two scoring.  Scala doesn't throw error on integer overflow?
+
+#### Day 11
