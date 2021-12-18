@@ -52,17 +52,28 @@ object Day11 extends App {
         grid += ListBuffer[Int]()
         for (octo <- l.octos.zipWithIndex)  grid(i) += octo._1.toInt
     }
-    printGrid
+    //printGrid
 
-    def printGrid : Unit = grid.foreach{ l =>
+    def printGrid(gen: Int) : Unit = {
+      println(s"Generation: $gen")
+        grid.foreach{ l =>
         println(l.map(_.toString.reverse.padTo(2,' ').reverse).mkString("⎦⎣"))
         //println(List.fill(l.length*2)("-").mkString(""))
+        }
     }
 
-    val steps = 100
-    for (step <- 0 to steps) {
-        println(s"Generation: $step:")
-        printGrid
+    def addOne : Unit = {
+        grid.zipWithIndex.foreach { case (row, i) =>
+            for (o <- row.indices) grid(i)(o) += 1
+        }
+    }
+
+    val steps = 1
+    printGrid(0)
+    for (step <- 1 to steps) {
+        // add 1 to each octo
+        addOne
+        printGrid(step)
     }
 
 
