@@ -1,3 +1,4 @@
+import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
 
 object Day11 extends App {
@@ -60,31 +61,44 @@ object Day11 extends App {
     // https://www.redblobgames.com/grids/parts/
     case class GridPoint(r: Int, c:Int)
 
-    def printGrid(gen: Int) : Unit = {
-      println(s"Generation: $gen")
+    def printGrid(step: Int) : Unit = {
+        // print to console a header followed by the energy level grid
+        println(s"Step: $step")
         grid.foreach{ l =>
-        println(l.map(_.toString.reverse.padTo(2,' ').reverse).mkString("⎦⎣"))
-        //println(List.fill(l.length*2)("-").mkString(""))
+            println(l.map(_.toString.reverse.padTo(2,' ').reverse).mkString("⎦⎣"))
+            //println(List.fill(l.length*2)("-").mkString(""))
         }
     }
 
     def addOne : Unit = {
+        // add +1 to each octopus, grid wide
         grid.zipWithIndex.foreach { case (row, r) =>
             for (c <- row.indices) grid(r)(c) += 1
         }
     }
 
-    def addOneNeighbors(ns: List[GridPoint]) : Unit = {
+    def addOneNeighbors(ns: List[GridPoint]) : Int = {
+        // given a list of grid points, add +1 to each octopus
         ns.foreach { p => grid(p.r)(p.c) += 1 }
+        // return count of new flashes
+        ns.count(p => grid(p.r)(p.c)==10)
     }
 
     def getFlashes: List[GridPoint] = {
+        // return grid points of octopuses who flashed in this step, grid wide
         val x = ListBuffer[GridPoint]()
         grid.zipWithIndex.foreach { case (row, r) =>
             for (c <- row.indices;
                 if grid(r)(c) == 10) x+= GridPoint(r,c)
         }
         x.toList
+    }
+
+    def setToZed : Unit = {
+        // set to 0 all the octopuses with energy level > 9 (that is, they flashed in this step)
+        grid.zipWithIndex.foreach { case (row, r) =>
+            for (c <- row.indices; if grid(r)(c) > 9) grid(r)(c) = 0
+        }
     }
 
     def getNeighbors(gp:GridPoint):List[GridPoint] = {
@@ -100,41 +114,41 @@ object Day11 extends App {
         neighbors
     }
 
-    def propigateFlashes(ps: List[Day11.GridPoint], cnt: Int):Int = {
-
+    @tailrec
+    def propagateFlash(ps: List[Day11.GridPoint], cnt: Int):Int = {
         if (ps.isEmpty) cnt
         else {
             val ns = getNeighbors(ps.head)
+            val newFlashCount = addOneNeighbors(ns)
+            val newNeighbors = for (n <- ns; if (grid(n.r)(n.c) == 10)) yield n
+            propagateFlash(ps.tail ::: newNeighbors, cnt + newFlashCount)
         }
-        1
     }
 
-    def doFlash: Int = {
-        val flashes = getFlashes
-        val cnt = propigateFlashes(flashes, 0)
-        flashes.length + cnt
-    }
-
-    val steps = 1
+    val steps = 2
     var flashCount = 0
     printGrid(0)
     for (step <- 1 to steps) {
         // add 1 to each octopus
         addOne
-        flashCount += doFlash
+        val flashes = getFlashes
+        flashCount += flashes.length
+        flashCount += propagateFlash(flashes, 0)
+        setToZed
         printGrid(step)
     }
 
+    val answer = flashCount
 
-println(s"Day 11 Part 1 TBD")
-println("")
+    println("")
+    println(s"Day 11 Part 1 number of flashes in $steps steps was: $answer")
+    println("")
 
 
-// Part Two
+    // Part Two
 
-println(s"Day 11 Part 2 tbd")
+    println(s"Day 11 Part 2 tbd")
 
-println(s"End at ${java.time.ZonedDateTime.now()}")
-
+    println(s"End at ${java.time.ZonedDateTime.now()}")
 
 }
