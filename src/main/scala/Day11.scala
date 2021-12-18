@@ -33,7 +33,7 @@ object Day11 extends App {
     println(s"Input file name: $filename")
     println(s"Each line is a: ${input.getClass}")
     println(s"Number lines: ${input.length}")
-    println(s"Number items per line: ${input.head.els.count(_ => true)}")
+    println(s"Number items per line: ${input.head.octos.count(_ => true)}")
     println(s"Input first line: ${input.head}")
     println(s"Input last line: ${input.tail.last}")
     println("------------------------------------")
@@ -47,24 +47,34 @@ object Day11 extends App {
     // and leave the original input alone
     var grid = ListBuffer[ListBuffer[Int]]()
 
-    // zip with index passes tuple-2 and case matches on tuple-2
+    // zip with index passes tuple-2 and case matches on tuple-2 passing l and i into the procedure
     input.zipWithIndex.foreach {case (l, i) =>
-        grid(i) = ListBuffer[Int]()
-        for (octo <- l.octos.zipWithIndex)  grid(i)(octo._2) += octo._1
+        grid += ListBuffer[Int]()
+        for (octo <- l.octos.zipWithIndex)  grid(i) += octo._1.toInt
+    }
+    printGrid
+
+    def printGrid : Unit = grid.foreach{ l =>
+        println(l.map(_.toString.reverse.padTo(2,' ').reverse).mkString("⎦⎣"))
+        //println(List.fill(l.length*2)("-").mkString(""))
+    }
+
+    val steps = 100
+    for (step <- 0 to steps) {
+        println(s"Generation: $step:")
+        printGrid
     }
 
 
+println(s"Day 11 Part 1 TBD")
+println("")
 
 
-    println(s"Day 11 Part 1 TBD")
-    println("")
+// Part Two
 
+println(s"Day 11 Part 2 tbd")
 
-    // Part Two
-
-    println(s"Day 11 Part 2 tbd")
-
-    println(s"End at ${java.time.ZonedDateTime.now()}")
+println(s"End at ${java.time.ZonedDateTime.now()}")
 
 
 }
