@@ -1,3 +1,5 @@
+import scala.collection.mutable.ListBuffer
+
 object Day11 extends App {
     // created 12/16/2021
     // https://adventofcode.com/2021/day/11
@@ -9,7 +11,7 @@ object Day11 extends App {
     val filename = "./input/testInput.txt"
 
     // Each octopus has an energy level mapped out by the submarine
-    case class inputLine(els: Vector[String])
+    case class inputLine(octos: Vector[String])
 
     val readInputData = () => {
         val source = io.Source.fromFile(filename)
@@ -38,6 +40,21 @@ object Day11 extends App {
 
 
     // Part One
+
+    // load input data into a grid
+
+    // List of lists to represent the sea floor grid
+    // and leave the original input alone
+    var grid = ListBuffer[ListBuffer[Int]]()
+
+    // zip with index passes tuple-2 and case matches on tuple-2
+    input.zipWithIndex.foreach {case (l, i) =>
+        grid(i) = ListBuffer[Int]()
+        for (octo <- l.octos.zipWithIndex)  grid(i)(octo._2) += octo._1
+    }
+
+
+
 
     println(s"Day 11 Part 1 TBD")
     println("")
