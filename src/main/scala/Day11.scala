@@ -8,8 +8,8 @@ object Day11 extends App {
     println(s"--- Day 11: Dumbo Octopus ---")
 
     // Puzzle Input Data File
-    //val filename = "./input/Day11Input.txt"
-    val filename = "./input/testInput.txt"
+    val filename = "./input/Day11Input.txt"
+    //val filename = "./input/testInput.txt"
 
     // Each octopus has an energy level mapped out by the submarine
     case class inputLine(octos: Vector[String])
@@ -171,11 +171,11 @@ object Day11 extends App {
         flashCount += flashes.length
         flashCount += propagateFlash(flashes, 0)
         setToZed()
-        printGrid(step)
+        if (allFlash() || step % 10 ==0) printGrid(step)
     }
 
     if (step > 0)
-        println(s"Day 11 Part 2 the first step where all the octopuses flash is $step")
+        println(s"Day 11 Part 2 the first step where all the octopuses flash is $step")  // 403
     else
         println(s"Day 11 Part 2 there was no step where all the octopuses flashed.")
 
