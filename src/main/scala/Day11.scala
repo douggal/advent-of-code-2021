@@ -48,14 +48,19 @@ object Day11 extends App {
     // and leave the original input alone
     // Use spreadsheet style coordinates, (r, c) where r is y-axis increasing downwards,
     // and c is x-axis increasing to the right
-    var grid = ListBuffer[ListBuffer[Int]]()
 
-    // zip with index passes tuple-2 and case matches on tuple-2 passing l and i into the procedure
-    input.zipWithIndex.foreach {case (l, r) =>
-        grid += ListBuffer[Int]()
-        for (octo <- l.octos.zipWithIndex)  grid(r) += octo._1.toInt
+    def initializeGrid(): Unit = {
+        input.zipWithIndex.foreach { case (l, r) =>
+            grid += ListBuffer[Int]()
+            for (octo <- l.octos.zipWithIndex) grid(r) += octo._1.toInt
+        }
     }
-    //printGrid
+
+    def resetGrid(): Unit = {
+        input.zipWithIndex.foreach { case (l, r) =>
+            for (c <- l.octos.indices) grid(r)(c) = input(r).octos(c).toInt
+        }
+    }
 
     // coordinates on sea floor are in x (columns) and y (rows) origin top-left and y increasing downwards
     // https://www.redblobgames.com/grids/parts/
@@ -101,6 +106,10 @@ object Day11 extends App {
         }
     }
 
+    def allFlash(): Boolean = {
+        grid.flatten.map(_ == 0).reduceLeft((a, b) => a && b)
+    }
+
     def getNeighbors(gp:GridPoint):List[GridPoint] = {
         // clockwise from top center
         // coordinates are spreadsheet form: (r,c) where
@@ -125,6 +134,9 @@ object Day11 extends App {
         }
     }
 
+    var grid = ListBuffer[ListBuffer[Int]]()
+    initializeGrid()
+
     val steps = 100
     var flashCount = 0
     printGrid(0)
@@ -136,6 +148,7 @@ object Day11 extends App {
         flashCount += propagateFlash(flashes, 0)
         setToZed()
         printGrid(step)
+
     }
 
     val answer = flashCount
@@ -143,11 +156,28 @@ object Day11 extends App {
     println("")
     println(s"Day 11 Part 1 number of flashes in $steps steps was: $answer")
     println("")
-
+    // 1688
 
     // Part Two
+    resetGrid()
 
-    println(s"Day 11 Part 2 tbd")
+    var step = 0
+    printGrid(0)
+    while (!allFlash() && step < 1e4) {
+        step += 1
+        // add 1 to each octopus
+        addOne()
+        val flashes = getFlashes
+        flashCount += flashes.length
+        flashCount += propagateFlash(flashes, 0)
+        setToZed()
+        printGrid(step)
+    }
+
+    if (step > 0)
+        println(s"Day 11 Part 2 the first step where all the octopuses flash is $step")
+    else
+        println(s"Day 11 Part 2 there was no step where all the octopuses flashed.")
 
     println(s"End at ${java.time.ZonedDateTime.now()}")
 

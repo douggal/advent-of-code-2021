@@ -68,3 +68,6 @@ to solve a problem.  [Computerphile](https://www.youtube.com/user/Computerphile)
 BigInt needed in Part Two scoring.  Scala doesn't throw error on integer overflow?
 
 #### Day 11
+Made the grid global to program. Seemed easy way to reduce visual clutter and 
+get the stars, but should
+have passed it along as parameter.
