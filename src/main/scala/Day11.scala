@@ -70,7 +70,7 @@ object Day11 extends App {
         }
     }
 
-    def addOne : Unit = {
+    def addOne() : Unit = {
         // add +1 to each octopus, grid wide
         grid.zipWithIndex.foreach { case (row, r) =>
             for (c <- row.indices) grid(r)(c) += 1
@@ -88,13 +88,13 @@ object Day11 extends App {
         // return grid points of octopuses who flashed in this step, grid wide
         val x = ListBuffer[GridPoint]()
         grid.zipWithIndex.foreach { case (row, r) =>
-            for (c <- row.indices;
+            for (c <- row.indices
                 if grid(r)(c) == 10) x+= GridPoint(r,c)
         }
         x.toList
     }
 
-    def setToZed : Unit = {
+    def setToZed() : Unit = {
         // set to 0 all the octopuses with energy level > 9 (that is, they flashed in this step)
         grid.zipWithIndex.foreach { case (row, r) =>
             for (c <- row.indices; if grid(r)(c) > 9) grid(r)(c) = 0
@@ -107,8 +107,8 @@ object Day11 extends App {
         // rs go from top to bottom (rows) and cs go increase from left to right, origin top-left
         val rs = List(0,1,1,1,0,-1,-1,-1)
         val cs = List(-1,-1,0,1,1,1,0,-1)
-        val neighbors = for (p <- rs.zip(cs);
-                             if gp.r + p._1 >= 0 && gp.r + p._1 < grid.length;
+        val neighbors = for (p <- rs.zip(cs)
+                             if gp.r + p._1 >= 0 && gp.r + p._1 < grid.length
                              if gp.c + p._2 >= 0 && gp.c + p._2 < grid.head.length)
                         yield GridPoint(gp.r + p._1 ,gp.c + p._2)
         neighbors
@@ -120,21 +120,21 @@ object Day11 extends App {
         else {
             val ns = getNeighbors(ps.head)
             val newFlashCount = addOneNeighbors(ns)
-            val newNeighbors = for (n <- ns; if (grid(n.r)(n.c) == 10)) yield n
+            val newNeighbors = for (n <- ns; if grid(n.r)(n.c) == 10) yield n
             propagateFlash(ps.tail ::: newNeighbors, cnt + newFlashCount)
         }
     }
 
-    val steps = 2
+    val steps = 100
     var flashCount = 0
     printGrid(0)
     for (step <- 1 to steps) {
         // add 1 to each octopus
-        addOne
+        addOne()
         val flashes = getFlashes
         flashCount += flashes.length
         flashCount += propagateFlash(flashes, 0)
-        setToZed
+        setToZed()
         printGrid(step)
     }
 
