@@ -54,24 +54,52 @@ object Day12 extends App {
 
     // build a dictionary of caves and to which caves they are connected
     val caveMap = mutable.HashMap[String,mutable.ListBuffer[String]]()
+    // "end" cave doesn't connect to anything
+    caveMap("end") = mutable.ListBuffer[String]()
     for (l <- input) {
         val cave = l.cave(0)
         val to  = l.cave(1)
         if (!caveMap.contains(cave))
             caveMap(cave) = mutable.ListBuffer[String]()
         caveMap(cave) += to
-        if (cave == cave.capitalize && cave != "end")
+        if (cave.contains(cave.capitalize) && !to.contains("end")) // end is the end
             // big cave, also add the reverse passage
             if (!caveMap.contains(to))
                 caveMap(to) = mutable.ListBuffer[String]()
             caveMap(to) += cave
     }
-    // "end" cave doesn't connect to anything
-    caveMap("end") = mutable.ListBuffer[String]()
 
     caveMap.foreach(c => println(s"$c"))
 
-    val answer = Integer.MAX_VALUE
+    val visitedCaves = mutable.HashMap[String,Int]()
+    val passages = mutable.ListBuffer[String]()
+
+    def spelunk(c: String, p: List[String]): Unit = {
+
+        if (visitedCaves.contains(c))
+            visitedCaves(c) += 1
+        else
+            visitedCaves += c -> 1
+
+        if (c == "end") { // the end
+            passages.addOne(p.toString())
+        }
+        else if (!caveMap.contains(c) || caveMap(c) == Nil) () // dead end
+        else // keep going
+            for (caveNext <- caveMap(c))
+                if (!caveNext.contains(c))  // can't go from and to itself
+                    if (caveNext == caveNext.capitalize)  // can go to big cave as many times as needed
+                        spelunk(caveNext, p ::: List(caveNext))
+                    else if (!p.contains(caveNext))  // small cave visit only once
+                        spelunk(caveNext, p ::: List(caveNext))
+                    else ()  // dead ended
+    }
+
+    spelunk("start",List("start"))
+
+    passages.foreach(println(_))
+
+    val answer = passages.length
 
     println(s"Day 12 Part 1 there are ${answer} paths through this cave system are there that visit small caves at most once.")
 
