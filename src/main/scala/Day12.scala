@@ -67,6 +67,12 @@ object Day12 extends App {
             if (!caveMap.contains(to))
                 caveMap(to) = mutable.ListBuffer[String]()
             caveMap(to) += cave
+        if (to.contains(to.capitalize) && !to.contains("end")) // end is the end
+        // big cave, also add the reverse passage
+            if (!caveMap.contains(to))
+                caveMap(to) = mutable.ListBuffer[String]()
+            caveMap(to) += cave
+
     }
 
     caveMap.foreach(c => println(s"$c"))
@@ -81,9 +87,9 @@ object Day12 extends App {
         else
             visitedCaves += c -> 1
 
-        if (c == "end") { // the end
-            passages.addOne(p.toString())
-        }
+        if (c == "end")
+            passages.addOne(p.toString())  // the end
+            ()
         else if (!caveMap.contains(c) || caveMap(c) == Nil) () // dead end
         else // keep going
             for (caveNext <- caveMap(c))
