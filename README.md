@@ -20,7 +20,8 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 9. Day  9: Smoke Basin
 10. Day 10: Syntax Scoring
 11. Day 11: Dumbo Octopus
-12. 
+12. Day 12: Passage Pathing
+13. 
 
 ### Notes
 #### Day 01
