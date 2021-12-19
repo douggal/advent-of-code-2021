@@ -72,3 +72,7 @@ BigInt needed in Part Two scoring.  Scala doesn't throw error on integer overflo
 Made the grid global to program. Seemed easy way to reduce visual clutter and 
 get the stars, but should
 have passed it along as parameter.
+
+#### Day 12
+Decided a recursive procedure would be less coding, and I'll bank
+on having enough heap space to handle it.

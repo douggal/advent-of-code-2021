@@ -8,8 +8,8 @@ object Day12 extends App {
     println(s"--- Day 12: Passage Pathing ---")
 
     // Puzzle Input Data File
-    //val filename = "./input/Day12Input.txt"
-    val filename = "./input/testInput.txt"
+    val filename = "./input/Day12Input.txt"
+    //val filename = "./input/testInput.txt"
 
     // the input file is a list of how all the caves are connected
     // each row of input is a connection, "conn", between caves
@@ -19,6 +19,7 @@ object Day12 extends App {
         val source = io.Source.fromFile(filename)
         for {
             line <- source.getLines().toVector
+            if (line.trim.nonEmpty)
             cols = line.strip().split("-")
         } yield
             inputLine(cols.toVector)
@@ -53,6 +54,7 @@ object Day12 extends App {
     */
 
     // build a dictionary of caves and to which caves they are connected
+    // Edit: works in both directions! Add reverse connection too.
     val caveMap = mutable.HashMap[String,mutable.ListBuffer[String]]()
     // "end" cave doesn't connect to anything
     caveMap("end") = mutable.ListBuffer[String]()
@@ -62,17 +64,10 @@ object Day12 extends App {
         if (!caveMap.contains(cave))
             caveMap(cave) = mutable.ListBuffer[String]()
         caveMap(cave) += to
-        if (cave.contains(cave.capitalize) && !to.contains("end")) // end is the end
-            // big cave, also add the reverse passage
-            if (!caveMap.contains(to))
-                caveMap(to) = mutable.ListBuffer[String]()
-            caveMap(to) += cave
-        if (to.contains(to.capitalize) && !to.contains("end")) // end is the end
-        // big cave, also add the reverse passage
-            if (!caveMap.contains(to))
-                caveMap(to) = mutable.ListBuffer[String]()
-            caveMap(to) += cave
-
+        // reverse dirction is also possible - the splunking will handle not repeating small caves
+        if (!caveMap.contains(to))
+            caveMap(to) = mutable.ListBuffer[String]()
+        caveMap(to) += cave
     }
 
     caveMap.foreach(c => println(s"$c"))
@@ -108,6 +103,8 @@ object Day12 extends App {
     val answer = passages.length
 
     println(s"Day 12 Part 1 there are ${answer} paths through this cave system are there that visit small caves at most once.")
+    // 3000
+
 
     // Part Two
 
