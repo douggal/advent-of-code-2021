@@ -125,22 +125,25 @@ object Day12 extends App {
             visitedCavesPt2 += c -> 1
 
         if (c == "end")
-            passagesPt2.addOne(p.toString())  // the end
+            passagesPt2.addOne(p.mkString(","))  // the end
             ()
         else if (!caveMapPt2.contains(c) || caveMapPt2(c) == Nil) () // dead end
         else // keep going
             for (caveNext <- caveMapPt2(c))
-                if (!caveNext.contains(c))  // can't go from and to itself
+                if (caveNext != c)  // can't go from and to itself
                     if (caveNext == caveNext.capitalize)  // can go to big cave as many times as needed
                         splunkPt2(caveNext, p ::: List(caveNext))
-                    else if (caveNext.contains("end")) splunkPt2(caveNext, p ::: List(caveNext))
-                    else if (!caveNext.contains("start") && p.count(caveNext.contains(_)) < 2)
+                    else if (caveNext == "end") splunkPt2(caveNext, p ::: List(caveNext))
+                    else if (caveNext != "start" && p.count(caveNext == _) < 2)
                         //!p.contains(caveNext))  // small cave visit only once
                         // Part 2 allow one small cave to be visited twice
-                        // how to figure out if list has current item more than twice?
-                        //val test = p.count(_ == caveNext)
-                        if (p.filter(a => !a.contains(a.capitalize)).distinct.length == p.filter(a => !a.contains(a.capitalize)).length)
-                            println(p)
+                        // how to figure out if list has current small cave identifier item more than twice?
+                        val test = p.filter(a => !a.contains(a.capitalize))
+                        // https://stackoverflow.com/questions/11448685/scala-how-can-i-count-the-number-of-occurrences-in-a-list?noredirect=1&lq=1
+                        val test2 = test.groupBy(identity).map(t => (t._1, t._2.length))
+                        // https://stackoverflow.com/questions/7802851/whats-the-best-way-to-inverse-sort-in-scala
+                        if (test2.values.toList.sortBy(- _).drop(1).count(l => l > 1) <= 1)
+                            //println(p)
                             splunkPt2(caveNext, p ::: List(caveNext))
                     else ()  // dead ended
     }
