@@ -76,12 +76,12 @@ object Day12 extends App {
     }
 
     val caveMap = makeCaveMap()
-    caveMap.foreach(c => println(s"$c"))
+    //caveMap.foreach(c => println(s"$c"))
 
     val visitedCaves = mutable.HashMap[String,Int]()
     val passages = mutable.ListBuffer[String]()
 
-    def spelunk(c: String, p: List[String]): Unit = {
+    def splunk(c: String, p: List[String]): Unit = {
 
         if (visitedCaves.contains(c))
             visitedCaves(c) += 1
@@ -89,22 +89,22 @@ object Day12 extends App {
             visitedCaves += c -> 1
 
         if (c == "end")
-            passages.addOne(p.toString())  // the end
+            passages.addOne(p.mkString(","))  // the end
             ()
         else if (!caveMap.contains(c) || caveMap(c) == Nil) () // dead end
         else // keep going
             for (caveNext <- caveMap(c))
                 if (!caveNext.contains(c))  // can't go from and to itself
                     if (caveNext == caveNext.capitalize)  // can go to big cave as many times as needed
-                        spelunk(caveNext, p ::: List(caveNext))
+                        splunk(caveNext, p ::: List(caveNext))
                     else if (!p.contains(caveNext))  // small cave visit only once
-                        spelunk(caveNext, p ::: List(caveNext))
+                        splunk(caveNext, p ::: List(caveNext))
                     else ()  // dead ended
     }
 
-    spelunk("start",List("start"))
+    splunk("start",List("start"))
 
-    //passages.foreach(println(_))
+    //passages.sortBy(identity).foreach(println(_))
 
     val answer = passages.length
 
@@ -140,9 +140,9 @@ object Day12 extends App {
                         // how to figure out if list has current small cave identifier item more than twice?
                         val test = p.filter(a => !a.contains(a.capitalize))
                         // https://stackoverflow.com/questions/11448685/scala-how-can-i-count-the-number-of-occurrences-in-a-list?noredirect=1&lq=1
-                        val test2 = test.groupBy(identity).map(t => (t._1, t._2.length))
+                        val test2 = test.groupBy(identity).map(t => (t._1, t._2.length)).values.toList
                         // https://stackoverflow.com/questions/7802851/whats-the-best-way-to-inverse-sort-in-scala
-                        if (test2.values.toList.sortBy(- _).drop(1).count(l => l > 1) <= 1)
+                        if (test2.sortBy(- _).drop(1).count(_ > 1) == 0)
                             //println(p)
                             splunkPt2(caveNext, p ::: List(caveNext))
                     else ()  // dead ended
@@ -150,7 +150,7 @@ object Day12 extends App {
 
     splunkPt2("start",List("start"))
 
-    passagesPt2.foreach(println(_))
+    passagesPt2.sortBy(identity).zipWithIndex.foreach((l,i) => println(s"$i: $l"))
 
     val answerPt2 = passagesPt2.length
 
