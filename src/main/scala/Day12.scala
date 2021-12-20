@@ -8,8 +8,8 @@ object Day12 extends App {
     println(s"--- Day 12: Passage Pathing ---")
 
     // Puzzle Input Data File
-    val filename = "./input/Day12Input.txt"
-    //val filename = "./input/testInput.txt"
+    //val filename = "./input/Day12Input.txt"
+    val filename = "./input/testInput.txt"
 
     // the input file is a list of how all the caves are connected
     // each row of input is a connection, "conn", between caves
@@ -26,9 +26,9 @@ object Day12 extends App {
     }
 
     val input = readInputData()
-    for (line <- input) {
-        println(line)
-    }
+//    for (line <- input) {
+//        println(line)
+//    }
 
     println("------------------------------------")
     println("Data Quality Control:")
@@ -104,7 +104,7 @@ object Day12 extends App {
 
     spelunk("start",List("start"))
 
-    passages.foreach(println(_))
+    //passages.foreach(println(_))
 
     val answer = passages.length
 
@@ -133,8 +133,15 @@ object Day12 extends App {
                 if (!caveNext.contains(c))  // can't go from and to itself
                     if (caveNext == caveNext.capitalize)  // can go to big cave as many times as needed
                         splunkPt2(caveNext, p ::: List(caveNext))
-                    else if (!p.contains(caveNext))  // small cave visit only once
-                        splunkPt2(caveNext, p ::: List(caveNext))
+                    else if (caveNext.contains("end")) splunkPt2(caveNext, p ::: List(caveNext))
+                    else if (!caveNext.contains("start") && p.count(caveNext.contains(_)) < 2)
+                        //!p.contains(caveNext))  // small cave visit only once
+                        // Part 2 allow one small cave to be visited twice
+                        // how to figure out if list has current item more than twice?
+                        //val test = p.count(_ == caveNext)
+                        if (p.filter(a => !a.contains(a.capitalize)).distinct.length == p.filter(a => !a.contains(a.capitalize)).length)
+                            println(p)
+                            splunkPt2(caveNext, p ::: List(caveNext))
                     else ()  // dead ended
     }
 
