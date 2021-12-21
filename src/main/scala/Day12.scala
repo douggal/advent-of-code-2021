@@ -133,25 +133,23 @@ object Day12 extends App {
                 if (caveNext != c && caveNext != "start")  // can't go from and to itself or back to start
                     if (caveNext == caveNext.capitalize)  // can go to big cave as many times as needed
                         splunkPt2(caveNext, p ::: List(caveNext))
-                    else if (caveNext == "end") splunkPt2(caveNext, p ::: List(caveNext)) // can see the end, go there
-                    else if (!caveNext.contains(caveNext.capitalize))  // a small cave
+                    else if (caveNext == "end") // can see the end, go there
+                        splunkPt2(caveNext, p ::: List(caveNext))
+                    else
+                        // a small cave
                         // Part 2 allow one small cave to be visited twice
                         // how to figure out if list has no more than 1 current small cave identifier item?
                         // https://stackoverflow.com/questions/11448685/scala-how-can-i-count-the-number-of-occurrences-in-a-list?noredirect=1&lq=1
                         // filter list by small caves (lower case letters) and then return a list of the counts of each small cave
                         val test = p.filter(a => !a.contains(a.capitalize) && a != "start") ::: List(caveNext)
-                        val test2 = test.groupBy(identity).map(t => (t._1, t._2.length)).values.toList
+                        val test2 = test.groupBy(identity).map(t => (t._1, t._2.length))
                         // https://stackoverflow.com/questions/7802851/whats-the-best-way-to-inverse-sort-in-scala
                         // and splunk only if there are 0 or 1 small caves in the path list with count > 1
-                        if ((test2.length == 1 && test2(0) <= 2))
+                        if (test2.values.count(_ == 2) <= 1  && !test2.values.exists(_ > 2))
                             println(p)
                             splunkPt2(caveNext, p ::: List(caveNext))
-                        else if (test2.length == 2 && test2.count(_ >= 2) == 0)
-                            splunkPt2(caveNext, p ::: List(caveNext))
-                        else if (test2.length > 2 && test2.count(_ >= 2) <= 1)
-                            splunkPt2(caveNext, p ::: List(caveNext))
-                        else ()
-                    else ()
+                        else
+                            ()
     }
 
     splunkPt2("start",List("start"))
@@ -160,7 +158,7 @@ object Day12 extends App {
 
     val answerPt2 = passagesPt2.length
 
-    println(s"Day 12 Part 2 allowing one small cave to be revisited there are now ${answerPt2} through this cave system.")
+    println(s"Day 12 Part 2 allowing one small cave to be revisited there are now [${answerPt2}] passages through this cave system.")
 
     println(s"End at ${java.time.ZonedDateTime.now()}")
 
