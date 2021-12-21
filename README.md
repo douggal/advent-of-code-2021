@@ -20,7 +20,8 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 9. Day  9: Smoke Basin
 10. Day 10: Syntax Scoring
 11. Day 11: Dumbo Octopus
-12. 
+12. Day 12: Passage Pathing
+13. 
 
 ### Notes
 #### Day 01
@@ -71,3 +72,13 @@ BigInt needed in Part Two scoring.  Scala doesn't throw error on integer overflo
 Made the grid global to program. Seemed easy way to reduce visual clutter and 
 get the stars, but should
 have passed it along as parameter.
+
+#### Day 12
+Decided a recursive procedure would be less coding, and I'll bank
+on having enough heap space to handle it.
+
+I first build a dictionary of each cave and the list of caves to which it is connected.
+Start at start and keep splunking forward to the next cave until either the end is reach (record the path from start),
+a dead end is found.  Fall back to last fork and go forward with next cave in the list until all
+the pathways are exhausted.
+
