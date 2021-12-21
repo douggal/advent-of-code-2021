@@ -8,8 +8,8 @@ object Day12 extends App {
     println(s"--- Day 12: Passage Pathing ---")
 
     // Puzzle Input Data File
-    //val filename = "./input/Day12Input.txt"
-    val filename = "./input/testInput.txt"
+    val filename = "./input/Day12Input.txt"
+    //val filename = "./input/testInput.txt"
 
     // the input file is a list of how all the caves are connected
     // each row of input is a connection, "conn", between caves
@@ -159,6 +159,7 @@ object Day12 extends App {
     val answerPt2 = passagesPt2.length
 
     println(s"Day 12 Part 2 allowing one small cave to be revisited there are now [${answerPt2}] passages through this cave system.")
+    // 74222
 
     println(s"End at ${java.time.ZonedDateTime.now()}")
 
