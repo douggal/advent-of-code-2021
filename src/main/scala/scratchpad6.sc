@@ -24,12 +24,12 @@ y.toString
 class CircularTrack(var x: Int) {
     def move(dx: Int): Unit = {
         val m = (x + dx) % 10
-        if (m==0) x=1 else x=m
+        if (m==0)x=10 else x=m
     }
     override def toString: String =
         s"Board position ($x)"
 }
 val p = new CircularTrack(4)
-p.move(6)
+p.move(7)
 p.x
-9 % 9
+p.x

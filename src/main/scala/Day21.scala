@@ -19,15 +19,20 @@ object Day21 extends App {
 
 
     // Part One
-    class CircularTrack(var x: Int) {
+    class CircularTrack(x: Int) {
+        var _position = x-1
+
+        // 0,1,2,3,4,5,6,7,8,9
+        def getPosition(): Int = {
+            _position + 1
+        }
 
         def move(dx: Int): Unit = {
-            val m = (x + dx) % 10
-            if (m==0) x=1 else x=m
+            _position = (_position + dx) % 10
         }
 
         override def toString: String =
-            s"Board position ($x)"
+            s"Board position [${_position+1}]"
     }
 
     class detDie() {
@@ -48,17 +53,19 @@ object Day21 extends App {
     val p1board = new CircularTrack(input.head)
     var p2score:Int = 0
     val p2board = new CircularTrack(input(1))
+    // have to alternate between the two players
     while (p1score < 1000 && p2score < 1000) {
         val p1dx = die.roll() + die.roll() + die.roll()
         p1board.move(p1dx)
-        p1score += p1board.x
+        p1score += p1board.getPosition()
 
-        val p2dx = die.roll() + die.roll() + die.roll()
-        p2board.move(p2dx)
-        p2score += p2board.x
+        if (p1score < 1000) {
+            val p2dx = die.roll() + die.roll() + die.roll()
+            p2board.move(p2dx)
+            p2score += p2board.getPosition()
+        }
 
         println(s"Player 1 score was ${p1score} at ${p1board}, and Player 2 score was ${p2score} at $p2board")
-
     }
 
 
