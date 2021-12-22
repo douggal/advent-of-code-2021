@@ -9,8 +9,8 @@ object Day21 extends App {
     //val filename = "./input/Day21Input.txt"
     //val filename = "./input/testInput.txt"
 
-    //val input = List(6,9)
-    val input = List(4,8)
+    val input = List(6,9)
+    //val input = List(4,8)
 
     println("------------------------------------")
     println("Data Quality Control:")
