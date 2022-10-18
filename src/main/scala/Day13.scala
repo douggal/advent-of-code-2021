@@ -6,23 +6,21 @@ object Day13 extends App {
     println(s"--- Day 13: Transparent Origami ---")
 
     // Puzzle Input Data File
-    val filename = "./input/Day13Input.txt"
-    //val filename = "./input/testInput.txt"
+    //val filename = "./input/Day13Input.txt"
+    val filename = "./input/testInput.txt"
 
     // TODO: read input - two sections
     // transparent paper
     // The transparent paper is marked with random dots and includes instructions
     // on how to fold it up (your puzzle input).
-    case class inputLine(dots: Vector[String])
+    case class inputLine(paper: String)
 
     val readInputData = () => {
         val source = io.Source.fromFile(filename)
         for {
             line <- source.getLines().toVector
-            if (line.trim.nonEmpty)
-            cols = line.strip().split(",")
         } yield
-            inputLine(cols.toVector)
+            inputLine(line)
     }
 
     val input = readInputData()
@@ -36,7 +34,7 @@ object Day13 extends App {
     println(s"Input file name: $filename")
     println(s"Each line is a: ${input.getClass}")
     println(s"Number lines: ${input.length}")
-    println(s"Number items per line: ${input.head.dots.count(_ => true)}")
+    println(s"Number items per line: ${input.head.paper.count(_ => true)}")
     println(s"Input first line: ${input.head}")
     println(s"Input last line: ${input.tail.last}")
     println("------------------------------------")
@@ -45,6 +43,12 @@ object Day13 extends App {
 
     // Part One
     println(s"Day 13 Part 1 TBD")
+
+    // parse dots
+
+
+    // parse instructions
+
 
 
     // Part Two
