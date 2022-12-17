@@ -22,7 +22,7 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 11. Day 11: Dumbo Octopus
 12. Day 12: Passage Pathing
 13. Day 13: Transparent Origami
-14. 
+14. Day 21: Dirac Dice
 
 ### Notes
 Day 12 last day completed prior to contest wrap up on 25th 2021.
