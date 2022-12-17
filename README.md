@@ -21,10 +21,12 @@ Some algorithms chosen were my attempt to exercise functional programming techni
 10. Day 10: Syntax Scoring
 11. Day 11: Dumbo Octopus
 12. Day 12: Passage Pathing
-13. ...
+13. Day 13: Transparent Origami
 14. Day 21: Dirac Dice
 
 ### Notes
+Day 12 last day completed prior to contest wrap up on 25th 2021.
+
 #### Day 01
 Off to a good start.
 
@@ -83,3 +85,4 @@ Start at start and keep splunking forward to the next cave until either the end 
 a dead end is found.  Fall back to last fork and go forward with next cave in the list until all
 the pathways are exhausted.
 
+#### Day 13
