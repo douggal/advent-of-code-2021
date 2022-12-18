@@ -2,7 +2,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.collection.mutable.ArrayBuffer
 
-object Day09 extends App {
+object Day09pt2tryagain extends App {
 
     // created 12/09/2021
     // https://adventofcode.com/2021/day/9
